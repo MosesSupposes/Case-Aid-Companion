@@ -2,7 +2,20 @@
  * Main
  */
 
-Util.append(document.body, createDestinationInputs());
+const appendToBody = Util.append(document.body);
+const renderDestinationInputs = Util.compose(
+  appendToBody,
+  createDestinationInputs
+);
+
+renderDestinationInputs();
+
+// render new destination component when the "+" button is presesd.
+document
+  .querySelector("#new_destination")
+  .addEventListener("click", function(_) {
+    renderDestinationInputs();
+  });
 
 /**
  * Helpers
