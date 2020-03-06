@@ -14,9 +14,7 @@
   // render new destination component when the "+" button is presesd.
   document
     .querySelector("#new_destination")
-    .addEventListener("click", function(_) {
-      renderDestinationInputs();
-    });
+    .addEventListener("click", renderDestinationInputs);
 
   /**
    * Helpers
