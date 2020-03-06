@@ -1,37 +1,39 @@
 /**
  * Main
  */
+// Here I'm wraping the Main function in an IIFE to avoid polluting the global namespace.
+(function Main() {
+  const appendToBody = Util.append(document.body);
+  const renderDestinationInputs = Util.compose(
+    appendToBody,
+    createDestinationInputs
+  );
 
-const appendToBody = Util.append(document.body);
-const renderDestinationInputs = Util.compose(
-  appendToBody,
-  createDestinationInputs
-);
+  renderDestinationInputs();
 
-renderDestinationInputs();
+  // render new destination component when the "+" button is presesd.
+  document
+    .querySelector("#new_destination")
+    .addEventListener("click", function(_) {
+      renderDestinationInputs();
+    });
 
-// render new destination component when the "+" button is presesd.
-document
-  .querySelector("#new_destination")
-  .addEventListener("click", function(_) {
-    renderDestinationInputs();
-  });
+  /**
+   * Helpers
+   */
+  function createInput(attributes) {
+    return Util.create("input", attributes);
+  }
 
-/**
- * Helpers
- */
-function createInput(attributes) {
-  return Util.create("input", attributes);
-}
+  function createDestinationInputs(fromAttributes = {}, toAttrubutes = {}) {
+    const container = Util.create("div", {});
 
-function createDestinationInputs(fromAttributes = {}, toAttrubutes = {}) {
-  const container = Util.create("div", {});
+    const from = createInput({ placeholder: "From", ...fromAttributes });
+    const to = createInput({ placeholder: "To", ...toAttrubutes });
 
-  const from = createInput({ placeholder: "From", ...fromAttributes });
-  const to = createInput({ placeholder: "To", ...toAttrubutes });
+    Util.append(container, from);
+    Util.append(container, to);
 
-  Util.append(container, from);
-  Util.append(container, to);
-
-  return container;
-}
+    return container;
+  }
+})();
