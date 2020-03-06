@@ -1,5 +1,5 @@
 const Util = (function() {
-  function create(element, attributes) {
+  function create(element, attributes = {}) {
     const el = document.createElement(element);
     Object.entries(attributes).forEach(function applyAtributes([
       attrKey,
@@ -12,7 +12,7 @@ const Util = (function() {
   }
 
   function append(to, el) {
-    return to.append(el);
+    return to.appendChild(el);
   }
 
   function compose(...fns) {
@@ -23,11 +23,12 @@ const Util = (function() {
     };
   }
 
-  function curry(fn, seen = []) {
-    return function(...args) {
-      return fn.length === seen.length + args.length
-        ? fn(...seen, ...args)
-        : curry(fn, [...seen, ...args]);
+  function curry(fn) {
+    return function currify() {
+      const args = Array.prototype.slice.call(arguments);
+      return args.length >= fn.length
+        ? fn.apply(null, args)
+        : currify.bind(null, ...args);
     };
   }
 
