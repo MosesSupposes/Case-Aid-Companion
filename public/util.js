@@ -34,3 +34,5 @@ const Util = (function() {
 
   return { create: curry(create), append: curry(append), compose, curry };
 })();
+
+export default Util;
