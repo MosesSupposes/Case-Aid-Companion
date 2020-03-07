@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/MosesSupposes/MommyMaps/issues"
   },
-  "homepage": "https://github.com/MosesSupposes/MommyMaps#readme"
+  "homepage": "https://github.com/MosesSupposes/MommyMaps#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
