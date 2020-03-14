@@ -1,4 +1,4 @@
-const Util = (function() {
+const Utils = (function() {
   function create(element, attributes = {}) {
     const el = document.createElement(element);
     Object.entries(attributes).forEach(function applyAtributes([
@@ -35,4 +35,4 @@ const Util = (function() {
   return { create: curry(create), append: curry(append), compose, curry };
 })();
 
-export default Util;
+export default Utils;
