@@ -27,9 +27,11 @@ function createInput(dispatch) {
 function DestinationInputs(Props) {
   var match = React.useReducer(reducer, initialState);
   var dispatch = match[1];
-  return React.createElement("form", undefined, Caml_array.caml_make_vect(match[0].visibleInputs, React.createElement("input", {
-                      type: "text"
-                    })), React.createElement("button", {
+  return React.createElement("form", undefined, Caml_array.caml_make_vect(match[0].visibleInputs, React.createElement("div", undefined, React.createElement("label", undefined, "From:", React.createElement("input", {
+                              type: "text"
+                            })), React.createElement("label", undefined, "To:", React.createElement("input", {
+                              type: "text"
+                            })))), React.createElement("button", {
                   onClick: (function ($$event) {
                       $$event.preventDefault();
                       return Curry._1(dispatch, /* AddNewInput */0);

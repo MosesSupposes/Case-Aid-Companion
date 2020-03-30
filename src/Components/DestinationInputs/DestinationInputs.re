@@ -25,7 +25,16 @@ let make = () => {
 
   <form>
     {ReasonReact.array(
-       Array.make(state.visibleInputs, <input type_="text" />),
+       Array.make(
+         state.visibleInputs,
+         <div>
+           <label>
+             {ReasonReact.string("From:")}
+             <input type_="text" />
+           </label>
+           <label> {ReasonReact.string("To:")} <input type_="text" /> </label>
+         </div>,
+       ),
      )}
     <button
       onClick={event => {
