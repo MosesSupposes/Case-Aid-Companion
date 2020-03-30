@@ -1,10 +1,10 @@
-import Util from "./util.js";
+import Utils from "./utils.js";
 /**
  * Main
  */
 // Here I'm wraping the Main function in an IIFE to avoid polluting the global namespace.
-const appendToBody = Util.append(document.body);
-const renderDestinationInputs = Util.compose(
+const appendToBody = Utils.append(document.body);
+const renderDestinationInputs = Utils.compose(
   appendToBody,
   createDestinationInputs
 );
@@ -20,17 +20,17 @@ document
  * Helpers
  */
 function createInput(attributes) {
-  return Util.create("input", attributes);
+  return Utils.create("input", attributes);
 }
 
 function createDestinationInputs(fromAttributes = {}, toAttrubutes = {}) {
-  const container = Util.create("div", {});
+  const container = Utils.create("div", {});
 
   const from = createInput({ placeholder: "From", ...fromAttributes });
   const to = createInput({ placeholder: "To", ...toAttrubutes });
 
-  Util.append(container, from);
-  Util.append(container, to);
+  Utils.append(container, from);
+  Utils.append(container, to);
 
   return container;
 }
