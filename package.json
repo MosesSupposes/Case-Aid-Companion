@@ -1,26 +1,27 @@
 {
   "name": "mommy-maps",
-  "version": "1.0.0",
-  "description": "A mileage tracker app.",
-  "main": "index.js",
+  "version": "0.1.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "build": "tsc --project tsconfig.json"
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w -ws _ ",
+    "clean": "bsb -clean-world",
+    "server": "moduleserve ./ --port 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MosesSupposes/MommyMaps.git"
+  "keywords": [
+    "BuckleScript",
+    "ReasonReact",
+    "reason-react"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "reason-react": ">=0.7.0"
   },
-  "author": "Moses A. Samuel & Andy Bettisworth",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MosesSupposes/MommyMaps/issues"
-  },
-  "homepage": "https://github.com/MosesSupposes/MommyMaps#readme",
   "devDependencies": {
-    "express": "^4.17.1",
-    "nodemon": "^2.0.2"
+    "bs-platform": "^7.2.2",
+    "moduleserve": "^0.9.0"
   }
 }
