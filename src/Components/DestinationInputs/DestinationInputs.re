@@ -2,18 +2,20 @@
 
 type state = {
   visibleInputs: int,
-  calculating: bool,
+  calculations: int,
   lastStartingPoint: string,
   lastDestination: string,
 };
-type action =
+type action('a) =
   | AddNewInput
   | RemoveInput
-  | CalculateDistance;
+  | CalculateDistance
+  | UpdateLastStartingPoint(ReactEvent.synthetic('a))
+  | UpdateLastDestination(ReactEvent.synthetic('a));
 
 let initialState = {
   visibleInputs: 1,
-  calculating: false,
+  calculations: 0,
   lastStartingPoint: "",
   lastDestination: "",
 };
@@ -22,7 +24,15 @@ let reducer = (state, action) => {
   switch (action) {
   | AddNewInput => {...state, visibleInputs: state.visibleInputs + 1}
   | RemoveInput => state
-  | CalculateDistance => {...state, calculating: !state.calculating}
+  | CalculateDistance => {...state, calculations: state.calculations + 1}
+  | UpdateLastStartingPoint(event) => {
+      ...state,
+      lastStartingPoint: ReactEvent.Synthetic.target(event)##value,
+    }
+  | UpdateLastDestination(event) => {
+      ...state,
+      lastDestination: ReactEvent.Synthetic.target(event)##value,
+    }
   };
 };
 
@@ -31,32 +41,22 @@ let calculateDistanceThenCreateNewInput = dispatch => {
   dispatch(CalculateDistance);
 };
 
+let handleLastStartingPointChange = (event, dispatch) => {
+  ReactEvent.Synthetic.persist(event);
+  dispatch(UpdateLastStartingPoint(event));
+};
+
+let handleLastDestinationChange = (event, dispatch) => {
+  ReactEvent.Synthetic.persist(event);
+  dispatch(UpdateLastDestination(event));
+};
+
 [@react.component]
 let make = () => {
   let (state, dispatch) = React.useReducer(reducer, initialState);
 
   React.useEffect1(
     () => {
-      let allStartingPoints: array('a) = [%bs.raw
-        {|
-          document.querySelectorAll(".from")
-        |}
-      ];
-
-      let allDestinations: array('a) = [%bs.raw
-        {|
-          document.querySelectorAll(".to")
-        |}
-      ];
-      let lastStartingPoint = allStartingPoints[Array.length(
-                                                  allStartingPoints,
-                                                )
-                                                - 1];
-      let lastDestination = allDestinations[Array.length(allDestinations) - 1];
-
-      Js.log(lastStartingPoint);
-      Js.log(lastDestination);
-
       let distanceMatrixBaseUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?";
       let apiKey = "AIzaSyDYDdl-3dUk1H59jTBcFU9KAd3UesUR9qE";
       let distanceMatrixFullUrl =
@@ -85,7 +85,7 @@ let make = () => {
 
       None;
     },
-    [|state.calculating|],
+    [|state.calculations|],
   );
 
   <form>
@@ -95,11 +95,23 @@ let make = () => {
          <div>
            <label>
              {ReasonReact.string("From:")}
-             <input type_="text" className="from" />
+             <input
+               type_="text"
+               className="from"
+               onChange={event =>
+                 handleLastStartingPointChange(event, dispatch)
+               }
+             />
            </label>
            <label>
              {ReasonReact.string("To:")}
-             <input type_="text" className="to" />
+             <input
+               type_="text"
+               className="to"
+               onChange={event =>
+                 handleLastDestinationChange(event, dispatch)
+               }
+             />
            </label>
          </div>,
        ),
