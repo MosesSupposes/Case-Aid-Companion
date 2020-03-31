@@ -4,6 +4,12 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
+var TotalDistance$ReasonReactExamples = require("../TotalDistance.bs.js");
+
+var wrapperStyles = {
+  display: "flex",
+  justifyContent: "space-around"
+};
 
 var initialState = {
   visibleInputs: 1,
@@ -70,38 +76,46 @@ function DestinationInputs(Props) {
   var dispatch = match[1];
   var state = match[0];
   React.useEffect((function () {
-          fetch("https://dog.ceo/api/breeds/image/random/3").then((function (response) {
+          var distanceMatrixFullUrl = "http://maps.googleapis.com/maps/api/distancematrix/json?origins=" + (state.lastStartingPoint + ("&destinations=" + (state.lastDestination + "&units=imperial&key=AIzaSyDYDdl-3dUk1H59jTBcFU9KAd3UesUR9qE")));
+          fetch(distanceMatrixFullUrl).then((function (response) {
                       return response.json();
                     })).then((function (jsonResponse) {
+                    console.log(jsonResponse);
                     return Promise.resolve(/* () */0);
                   })).catch((function (_err) {
+                  console.log(_err);
                   return Promise.resolve(/* () */0);
                 }));
           return ;
         }), [state.calculations]);
-  return React.createElement("form", undefined, Caml_array.caml_make_vect(state.visibleInputs, React.createElement("div", undefined, React.createElement("label", undefined, "From:", React.createElement("input", {
-                              className: "from",
-                              type: "text",
-                              onChange: (function ($$event) {
-                                  return handleLastStartingPointChange($$event, dispatch);
-                                })
-                            })), React.createElement("label", undefined, "To:", React.createElement("input", {
-                              className: "to",
-                              type: "text",
-                              onChange: (function ($$event) {
-                                  return handleLastDestinationChange($$event, dispatch);
-                                })
-                            })))), React.createElement("button", {
-                  onClick: (function ($$event) {
-                      $$event.preventDefault();
-                      Curry._1(dispatch, /* AddNewInput */0);
-                      return Curry._1(dispatch, /* CalculateDistance */2);
-                    })
-                }, "Next destination"));
+  return React.createElement("div", {
+              style: wrapperStyles
+            }, React.createElement("form", undefined, Caml_array.caml_make_vect(state.visibleInputs, React.createElement("div", undefined, React.createElement("label", undefined, "From:", React.createElement("input", {
+                                  className: "from",
+                                  type: "text",
+                                  onChange: (function ($$event) {
+                                      return handleLastStartingPointChange($$event, dispatch);
+                                    })
+                                })), React.createElement("label", undefined, "To:", React.createElement("input", {
+                                  className: "to",
+                                  type: "text",
+                                  onChange: (function ($$event) {
+                                      return handleLastDestinationChange($$event, dispatch);
+                                    })
+                                })))), React.createElement("button", {
+                      onClick: (function ($$event) {
+                          $$event.preventDefault();
+                          Curry._1(dispatch, /* AddNewInput */0);
+                          return Curry._1(dispatch, /* CalculateDistance */2);
+                        })
+                    }, "Next destination")), React.createElement(TotalDistance$ReasonReactExamples.make, {
+                  totalDistance: "0"
+                }));
 }
 
 var make = DestinationInputs;
 
+exports.wrapperStyles = wrapperStyles;
 exports.initialState = initialState;
 exports.reducer = reducer;
 exports.calculateDistanceThenCreateNewInput = calculateDistanceThenCreateNewInput;

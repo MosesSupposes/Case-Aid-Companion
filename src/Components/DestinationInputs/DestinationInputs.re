@@ -1,5 +1,8 @@
 [@bs.val] external fetch: string => Js.Promise.t('a) = "fetch";
 
+let wrapperStyles =
+  ReactDOMRe.Style.make(~display="flex", ~justifyContent="space-around", ());
+
 type state = {
   visibleInputs: int,
   calculations: int,
@@ -57,7 +60,7 @@ let make = () => {
 
   React.useEffect1(
     () => {
-      let distanceMatrixBaseUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?";
+      let distanceMatrixBaseUrl = "http://maps.googleapis.com/maps/api/distancematrix/json?";
       let apiKey = "AIzaSyDYDdl-3dUk1H59jTBcFU9KAd3UesUR9qE";
       let distanceMatrixFullUrl =
         distanceMatrixBaseUrl
@@ -70,15 +73,17 @@ let make = () => {
         ++ apiKey;
 
       Js.Promise.(
-        fetch("https://dog.ceo/api/breeds/image/random/3")
+        fetch(distanceMatrixFullUrl)
         |> then_(response => response##json())
         |> then_(jsonResponse => {
              //  setState(_previousState => LoadedDogs(jsonResponse##message));
-             Js.Promise.resolve()
+             Js.log(jsonResponse);
+             Js.Promise.resolve();
            })
         |> catch(_err => {
              //  setState(_previousState => ErrorFetchingDogs);
-             Js.Promise.resolve()
+             Js.log(_err);
+             Js.Promise.resolve();
            })
         |> ignore
       );
@@ -88,40 +93,43 @@ let make = () => {
     [|state.calculations|],
   );
 
-  <form>
-    {ReasonReact.array(
-       Array.make(
-         state.visibleInputs,
-         <div>
-           <label>
-             {ReasonReact.string("From:")}
-             <input
-               type_="text"
-               className="from"
-               onChange={event =>
-                 handleLastStartingPointChange(event, dispatch)
-               }
-             />
-           </label>
-           <label>
-             {ReasonReact.string("To:")}
-             <input
-               type_="text"
-               className="to"
-               onChange={event =>
-                 handleLastDestinationChange(event, dispatch)
-               }
-             />
-           </label>
-         </div>,
-       ),
-     )}
-    <button
-      onClick={event => {
-        ReactEvent.Mouse.preventDefault(event);
-        calculateDistanceThenCreateNewInput(dispatch);
-      }}>
-      {ReasonReact.string("Next destination")}
-    </button>
-  </form>;
+  <div style=wrapperStyles>
+    <form>
+      {ReasonReact.array(
+         Array.make(
+           state.visibleInputs,
+           <div>
+             <label>
+               {ReasonReact.string("From:")}
+               <input
+                 type_="text"
+                 className="from"
+                 onChange={event =>
+                   handleLastStartingPointChange(event, dispatch)
+                 }
+               />
+             </label>
+             <label>
+               {ReasonReact.string("To:")}
+               <input
+                 type_="text"
+                 className="to"
+                 onChange={event =>
+                   handleLastDestinationChange(event, dispatch)
+                 }
+               />
+             </label>
+           </div>,
+         ),
+       )}
+      <button
+        onClick={event => {
+          ReactEvent.Mouse.preventDefault(event);
+          calculateDistanceThenCreateNewInput(dispatch);
+        }}>
+        {ReasonReact.string("Next destination")}
+      </button>
+    </form>
+    <TotalDistance totalDistance="0" />
+  </div>;
 };
