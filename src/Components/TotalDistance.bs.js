@@ -9,14 +9,14 @@ var wrapperStyles = {
 };
 
 function TotalDistance(Props) {
-  var totalDistance = Props.totalDistance;
+  var distance = Props.distance;
   return React.createElement("div", {
               style: wrapperStyles
             }, React.createElement("div", {
                   style: {
                     margin: "1rem 0"
                   }
-                }, "Total Distatnce: " + (totalDistance + " miles")));
+                }, "Total Distatnce: " + (distance + " miles")));
 }
 
 var make = TotalDistance;

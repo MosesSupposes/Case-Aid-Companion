@@ -77,7 +77,7 @@ function App(Props) {
   var dispatch = match[1];
   var state = match[0];
   React.useEffect((function () {
-          var distanceMatrixFullUrl = "http://maps.googleapis.com/maps/api/distancematrix/json?origins=" + (state.lastStartingPoint + ("&destinations=" + (state.lastDestination + "&units=imperial&key=AIzaSyDYDdl-3dUk1H59jTBcFU9KAd3UesUR9qE")));
+          var distanceMatrixFullUrl = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + (state.lastStartingPoint + ("&destinations=" + (state.lastDestination + "&units=imperial&key=AIzaSyDYDdl-3dUk1H59jTBcFU9KAd3UesUR9qE")));
           fetch(distanceMatrixFullUrl).then((function (response) {
                       return response.json();
                     })).then((function (jsonResponse) {
@@ -102,7 +102,7 @@ function App(Props) {
                           return Curry._1(dispatch, /* CalculateDistance */2);
                         })
                     }, "Next destination")), React.createElement(TotalDistance$ReasonReactExamples.make, {
-                  totalDistance: "0"
+                  distance: "0"
                 }));
 }
 

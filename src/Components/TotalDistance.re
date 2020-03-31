@@ -7,10 +7,10 @@ let wrapperStyles =
   );
 
 [@react.component]
-let make = (~totalDistance) => {
+let make = (~distance) => {
   <div style=wrapperStyles>
     <div style={ReactDOMRe.Style.make(~margin="1rem 0", ())}>
-      {React.string("Total Distatnce: " ++ totalDistance ++ " miles")}
+      {React.string("Total Distatnce: " ++ distance ++ " miles")}
     </div>
   </div>;
 };

@@ -60,10 +60,12 @@ let make = () => {
 
   React.useEffect1(
     () => {
-      let distanceMatrixBaseUrl = "http://maps.googleapis.com/maps/api/distancematrix/json?";
+      let corsAnywhereUrl = "https://cors-anywhere.herokuapp.com/";
+      let distanceMatrixBaseUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?";
       let apiKey = "AIzaSyDYDdl-3dUk1H59jTBcFU9KAd3UesUR9qE";
       let distanceMatrixFullUrl =
-        distanceMatrixBaseUrl
+        corsAnywhereUrl
+        ++ distanceMatrixBaseUrl
         ++ "origins="
         ++ state.lastStartingPoint
         ++ "&destinations="
@@ -113,6 +115,6 @@ let make = () => {
         {ReasonReact.string("Next destination")}
       </button>
     </form>
-    <TotalDistance totalDistance="0" />
+    <TotalDistance distance="0" />
   </div>;
 };
