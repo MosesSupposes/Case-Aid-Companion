@@ -2,8 +2,8 @@
 
 var React = require("react");
 var ReactDom = require("react-dom");
+var App$ReasonReactExamples = require("./Components/App.bs.js");
 var ExampleStyles$ReasonReactExamples = require("./Components/Examples/ExampleStyles.bs.js");
-var DestinationInputs$ReasonReactExamples = require("./Components/DestinationInputs/DestinationInputs.bs.js");
 
 var style = document.createElement("style");
 
@@ -25,7 +25,7 @@ function makeContainer(text) {
   return content;
 }
 
-ReactDom.render(React.createElement(DestinationInputs$ReasonReactExamples.make, { }), makeContainer("Mommy Maps"));
+ReactDom.render(React.createElement(App$ReasonReactExamples.make, { }), makeContainer("Mommy Maps"));
 
 exports.style = style;
 exports.makeContainer = makeContainer;

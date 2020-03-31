@@ -4,7 +4,8 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
-var TotalDistance$ReasonReactExamples = require("../TotalDistance.bs.js");
+var TotalDistance$ReasonReactExamples = require("./TotalDistance.bs.js");
+var DestinationInputs$ReasonReactExamples = require("./DestinationInputs.bs.js");
 
 var wrapperStyles = {
   display: "flex",
@@ -71,7 +72,7 @@ function handleLastDestinationChange($$event, dispatch) {
   return Curry._1(dispatch, /* UpdateLastDestination */Block.__(1, [$$event]));
 }
 
-function DestinationInputs(Props) {
+function App(Props) {
   var match = React.useReducer(reducer, initialState);
   var dispatch = match[1];
   var state = match[0];
@@ -90,19 +91,11 @@ function DestinationInputs(Props) {
         }), [state.calculations]);
   return React.createElement("div", {
               style: wrapperStyles
-            }, React.createElement("form", undefined, Caml_array.caml_make_vect(state.visibleInputs, React.createElement("div", undefined, React.createElement("label", undefined, "From:", React.createElement("input", {
-                                  className: "from",
-                                  type: "text",
-                                  onChange: (function ($$event) {
-                                      return handleLastStartingPointChange($$event, dispatch);
-                                    })
-                                })), React.createElement("label", undefined, "To:", React.createElement("input", {
-                                  className: "to",
-                                  type: "text",
-                                  onChange: (function ($$event) {
-                                      return handleLastDestinationChange($$event, dispatch);
-                                    })
-                                })))), React.createElement("button", {
+            }, React.createElement("form", undefined, Caml_array.caml_make_vect(state.visibleInputs, React.createElement(DestinationInputs$ReasonReactExamples.make, {
+                          handleLastStartingPointChange: handleLastStartingPointChange,
+                          handleLastDestinationChange: handleLastDestinationChange,
+                          dispatch: dispatch
+                        })), React.createElement("button", {
                       onClick: (function ($$event) {
                           $$event.preventDefault();
                           Curry._1(dispatch, /* AddNewInput */0);
@@ -113,7 +106,7 @@ function DestinationInputs(Props) {
                 }));
 }
 
-var make = DestinationInputs;
+var make = App;
 
 exports.wrapperStyles = wrapperStyles;
 exports.initialState = initialState;
