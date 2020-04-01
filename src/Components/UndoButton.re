@@ -9,5 +9,7 @@ let undoButtonStyles =
 
 [@react.component]
 let make = (~undoLastCalculation) => {
-  <button style=undoButtonStyles> {ReasonReact.string("Undo")} </button>;
+  <button onClick=undoLastCalculation style=undoButtonStyles>
+    {ReasonReact.string("Undo")}
+  </button>;
 };

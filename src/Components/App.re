@@ -70,6 +70,7 @@ let reducer = (state, action) => {
   | RemoveInput(AmountToSubtract(amount)) => {
       ...state,
       totalDistance: state.totalDistance -. amount,
+      visibleInputs: state.visibleInputs - 1,
     }
   | CalculateDistance => {...state, calculations: state.calculations + 1}
   | UpdateLastStartingPoint(event) => {
@@ -83,6 +84,7 @@ let reducer = (state, action) => {
   | IncreaseTotalDistance(AmountToAdd(amount)) => {
       ...state,
       totalDistance: state.totalDistance +. amount,
+      lastDistanceAdded: amount,
     }
   | _ => state
   };
@@ -107,7 +109,8 @@ let handleLastDestinationChange = (event, dispatch) => {
   dispatch(UpdateLastDestination(event));
 };
 
-let undoLastCalculation = (event, dispatch) => ();
+let undoLastCalculation = (event, dispatch, state) =>
+  dispatch(RemoveInput(AmountToSubtract(state.lastDistanceAdded)));
 
 /**
  * =============== Main ===============
@@ -192,7 +195,11 @@ let make = () => {
     </form>
     <div style=rightSideOfPageStyles>
       <TotalDistance distance={string_of_float(state.totalDistance)} />
-      <UndoButton undoLastCalculation />
+      <UndoButton
+        undoLastCalculation={event =>
+          undoLastCalculation(event, dispatch, state)
+        }
+      />
     </div>
   </div>;
 };

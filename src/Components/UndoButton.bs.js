@@ -10,9 +10,10 @@ var undoButtonStyles = {
 };
 
 function UndoButton(Props) {
-  Props.undoLastCalculation;
+  var undoLastCalculation = Props.undoLastCalculation;
   return React.createElement("button", {
-              style: undoButtonStyles
+              style: undoButtonStyles,
+              onClick: undoLastCalculation
             }, "Undo");
 }
 

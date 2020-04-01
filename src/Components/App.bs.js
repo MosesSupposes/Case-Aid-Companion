@@ -68,7 +68,7 @@ function reducer(state, action) {
           var match = action[0];
           if (match.tag) {
             return {
-                    visibleInputs: state.visibleInputs,
+                    visibleInputs: state.visibleInputs - 1 | 0,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
@@ -101,13 +101,14 @@ function reducer(state, action) {
           if (match$1.tag) {
             return state;
           } else {
+            var amount = match$1[0];
             return {
                     visibleInputs: state.visibleInputs,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
-                    totalDistance: state.totalDistance + match$1[0],
-                    lastDistanceAdded: state.lastDistanceAdded
+                    totalDistance: state.totalDistance + amount,
+                    lastDistanceAdded: amount
                   };
           }
       
@@ -130,8 +131,8 @@ function handleLastDestinationChange($$event, dispatch) {
   return Curry._1(dispatch, /* UpdateLastDestination */Block.__(2, [$$event]));
 }
 
-function undoLastCalculation($$event, dispatch) {
-  return /* () */0;
+function undoLastCalculation($$event, dispatch, state) {
+  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [state.lastDistanceAdded])]));
 }
 
 function App(Props) {
@@ -171,7 +172,9 @@ function App(Props) {
                 }, React.createElement(TotalDistance$ReasonReactExamples.make, {
                       distance: Pervasives.string_of_float(state.totalDistance)
                     }), React.createElement(UndoButton$ReasonReactExamples.make, {
-                      undoLastCalculation: undoLastCalculation
+                      undoLastCalculation: (function ($$event) {
+                          return undoLastCalculation($$event, dispatch, state);
+                        })
                     })));
 }
 
