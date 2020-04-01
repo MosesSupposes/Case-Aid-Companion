@@ -25,58 +25,79 @@ var initialState = {
   calculations: 0,
   lastStartingPoint: "",
   lastDestination: "",
-  totalDistance: 0.0
+  totalDistance: 0.0,
+  lastDistanceAdded: 0.0
 };
 
 function reducer(state, action) {
   if (typeof action === "number") {
-    switch (action) {
-      case /* AddNewInput */0 :
-          return {
-                  visibleInputs: state.visibleInputs + 1 | 0,
-                  calculations: state.calculations,
-                  lastStartingPoint: state.lastStartingPoint,
-                  lastDestination: state.lastDestination,
-                  totalDistance: state.totalDistance
-                };
-      case /* RemoveInput */1 :
-          return state;
-      case /* CalculateDistance */2 :
-          return {
-                  visibleInputs: state.visibleInputs,
-                  calculations: state.calculations + 1 | 0,
-                  lastStartingPoint: state.lastStartingPoint,
-                  lastDestination: state.lastDestination,
-                  totalDistance: state.totalDistance
-                };
-      
+    if (action === /* AddNewInput */0) {
+      return {
+              visibleInputs: state.visibleInputs + 1 | 0,
+              calculations: state.calculations,
+              lastStartingPoint: state.lastStartingPoint,
+              lastDestination: state.lastDestination,
+              totalDistance: state.totalDistance,
+              lastDistanceAdded: state.lastDistanceAdded
+            };
+    } else {
+      return {
+              visibleInputs: state.visibleInputs,
+              calculations: state.calculations + 1 | 0,
+              lastStartingPoint: state.lastStartingPoint,
+              lastDestination: state.lastDestination,
+              totalDistance: state.totalDistance,
+              lastDistanceAdded: state.lastDistanceAdded
+            };
     }
   } else {
     switch (action.tag | 0) {
-      case /* UpdateLastStartingPoint */0 :
+      case /* RemoveInput */0 :
+          var amount = action[0];
+          if (amount.tag) {
+            return {
+                    visibleInputs: state.visibleInputs,
+                    calculations: state.calculations,
+                    lastStartingPoint: state.lastStartingPoint,
+                    lastDestination: state.lastDestination,
+                    totalDistance: state.totalDistance - amount[0],
+                    lastDistanceAdded: state.lastDistanceAdded
+                  };
+          } else {
+            return state;
+          }
+      case /* UpdateLastStartingPoint */1 :
           return {
                   visibleInputs: state.visibleInputs,
                   calculations: state.calculations,
                   lastStartingPoint: action[0].target.value,
                   lastDestination: state.lastDestination,
-                  totalDistance: state.totalDistance
+                  totalDistance: state.totalDistance,
+                  lastDistanceAdded: state.lastDistanceAdded
                 };
-      case /* UpdateLastDestination */1 :
+      case /* UpdateLastDestination */2 :
           return {
                   visibleInputs: state.visibleInputs,
                   calculations: state.calculations,
                   lastStartingPoint: state.lastStartingPoint,
                   lastDestination: action[0].target.value,
-                  totalDistance: state.totalDistance
+                  totalDistance: state.totalDistance,
+                  lastDistanceAdded: state.lastDistanceAdded
                 };
-      case /* IncreaseTotalDistance */2 :
-          return {
-                  visibleInputs: state.visibleInputs,
-                  calculations: state.calculations,
-                  lastStartingPoint: state.lastStartingPoint,
-                  lastDestination: state.lastDestination,
-                  totalDistance: state.totalDistance + action[0]
-                };
+      case /* IncreaseTotalDistance */3 :
+          var amount$1 = action[0];
+          if (amount$1.tag) {
+            return state;
+          } else {
+            return {
+                    visibleInputs: state.visibleInputs,
+                    calculations: state.calculations,
+                    lastStartingPoint: state.lastStartingPoint,
+                    lastDestination: state.lastDestination,
+                    totalDistance: state.totalDistance + amount$1[0],
+                    lastDistanceAdded: state.lastDistanceAdded
+                  };
+          }
       
     }
   }
@@ -84,17 +105,17 @@ function reducer(state, action) {
 
 function calculateDistanceThenCreateNewInput(dispatch) {
   Curry._1(dispatch, /* AddNewInput */0);
-  return Curry._1(dispatch, /* CalculateDistance */2);
+  return Curry._1(dispatch, /* CalculateDistance */1);
 }
 
 function handleLastStartingPointChange($$event, dispatch) {
   $$event.persist();
-  return Curry._1(dispatch, /* UpdateLastStartingPoint */Block.__(0, [$$event]));
+  return Curry._1(dispatch, /* UpdateLastStartingPoint */Block.__(1, [$$event]));
 }
 
 function handleLastDestinationChange($$event, dispatch) {
   $$event.persist();
-  return Curry._1(dispatch, /* UpdateLastDestination */Block.__(1, [$$event]));
+  return Curry._1(dispatch, /* UpdateLastDestination */Block.__(2, [$$event]));
 }
 
 function App(Props) {
@@ -107,9 +128,8 @@ function App(Props) {
                       return response.json();
                     })).then((function (jsonResponse) {
                     var distance = ((jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0");
-                    ((console.log("AYO", distance)));
-                    Curry._1(dispatch, /* IncreaseTotalDistance */Block.__(2, [Caml_format.caml_float_of_string(List.hd($$String.split_on_char(/* " " */32, distance)))]));
-                    console.log(jsonResponse);
+                    var x = Caml_format.caml_float_of_string(List.hd($$String.split_on_char(/* " " */32, distance)));
+                    Curry._1(dispatch, /* IncreaseTotalDistance */Block.__(3, [/* AmountToAdd */Block.__(0, [x])]));
                     return Promise.resolve(/* () */0);
                   })).catch((function (_err) {
                   console.log(_err);
@@ -128,7 +148,7 @@ function App(Props) {
                       onClick: (function ($$event) {
                           $$event.preventDefault();
                           Curry._1(dispatch, /* AddNewInput */0);
-                          return Curry._1(dispatch, /* CalculateDistance */2);
+                          return Curry._1(dispatch, /* CalculateDistance */1);
                         })
                     }, "Next destination")), React.createElement(TotalDistance$ReasonReactExamples.make, {
                   distance: Pervasives.string_of_float(state.totalDistance)

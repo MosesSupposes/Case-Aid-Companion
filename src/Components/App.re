@@ -10,19 +10,26 @@ type state = {
   lastStartingPoint: string,
   lastDestination: string,
   totalDistance: float,
+  lastDistanceAdded: float,
 };
-type action('a) =
+
+type calculation =
+  | AmountToAdd(float)
+  | AmountToSubtract(float);
+
+type action('event) =
   | AddNewInput
-  | RemoveInput
+  | RemoveInput(calculation)
   | CalculateDistance
-  | UpdateLastStartingPoint(ReactEvent.synthetic('a))
-  | UpdateLastDestination(ReactEvent.synthetic('a))
-  | IncreaseTotalDistance(float);
+  | UpdateLastStartingPoint(ReactEvent.synthetic('event))
+  | UpdateLastDestination(ReactEvent.synthetic('event))
+  | IncreaseTotalDistance(calculation);
 
 let initialState = {
   visibleInputs: 1,
   calculations: 0,
   totalDistance: 0.0,
+  lastDistanceAdded: 0.0,
   lastStartingPoint: "",
   lastDestination: "",
 };
@@ -30,7 +37,14 @@ let initialState = {
 let reducer = (state, action) => {
   switch (action) {
   | AddNewInput => {...state, visibleInputs: state.visibleInputs + 1}
-  | RemoveInput => state
+  | RemoveInput(amount) =>
+    switch (amount) {
+    | AmountToSubtract(amount) => {
+        ...state,
+        totalDistance: state.totalDistance -. amount,
+      }
+    | _ => state
+    }
   | CalculateDistance => {...state, calculations: state.calculations + 1}
   | UpdateLastStartingPoint(event) => {
       ...state,
@@ -40,9 +54,13 @@ let reducer = (state, action) => {
       ...state,
       lastDestination: ReactEvent.Synthetic.target(event)##value,
     }
-  | IncreaseTotalDistance(amount) => {
-      ...state,
-      totalDistance: state.totalDistance +. amount,
+  | IncreaseTotalDistance(amount) =>
+    switch (amount) {
+    | AmountToAdd(amount) => {
+        ...state,
+        totalDistance: state.totalDistance +. amount,
+      }
+    | _ => state
     }
   };
 };
@@ -87,7 +105,7 @@ let make = () => {
         |> then_(response => response##json())
         |> then_(jsonResponse => {
              let constructIncreaseTotalDistance = x =>
-               IncreaseTotalDistance(x);
+               IncreaseTotalDistance(AmountToAdd(x));
 
              let distance: string = [%bs.raw
                {|
@@ -95,8 +113,7 @@ let make = () => {
                 |}
              ];
 
-             let log: unit = [%bs.raw {| console.log("AYO", distance)|}];
-
+             // Increase the total distance by the computed result
              distance
              |> String.split_on_char(' ')
              |> List.hd
@@ -104,7 +121,6 @@ let make = () => {
              |> constructIncreaseTotalDistance
              |> dispatch;
 
-             Js.log(jsonResponse);
              Js.Promise.resolve();
            })
         |> catch(_err => {
