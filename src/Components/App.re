@@ -1,4 +1,12 @@
-[@bs.val] external fetch: string => Js.Promise.t('a) = "fetch";
+/**
+ * =============== Imports ===============
+ *  */
+[@bs.val]
+external fetch: string => Js.Promise.t('a) = "fetch";
+
+/**
+ * =============== Styles ===============
+ *  */
 
 let wrapperStyles =
   ReactDOMRe.Style.make(
@@ -17,6 +25,10 @@ let rightSideOfPageStyles =
     ~alignItems="flex-end",
     (),
   );
+
+/**
+ * =============== Types ===============
+ *  */
 
 type state = {
   visibleInputs: int,
@@ -38,6 +50,10 @@ type action('event) =
   | UpdateLastStartingPoint(ReactEvent.synthetic('event))
   | UpdateLastDestination(ReactEvent.synthetic('event))
   | IncreaseTotalDistance(calculation);
+
+/**
+ * =============== State / State Management ===============
+ */
 
 let initialState = {
   visibleInputs: 1,
@@ -72,6 +88,10 @@ let reducer = (state, action) => {
   };
 };
 
+/**
+ * =============== Helpers ===============
+ */
+
 let calculateDistanceThenCreateNewInput = dispatch => {
   dispatch(AddNewInput);
   dispatch(CalculateDistance);
@@ -88,6 +108,10 @@ let handleLastDestinationChange = (event, dispatch) => {
 };
 
 let undoLastCalculation = (event, dispatch) => ();
+
+/**
+ * =============== Main ===============
+ */
 
 [@react.component]
 let make = () => {
