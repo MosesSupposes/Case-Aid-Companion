@@ -16,6 +16,10 @@ var wrapperStyles = {
   justifyContent: "space-around"
 };
 
+var buttonStyles = {
+  marginTop: ".35rem"
+};
+
 var initialState = {
   visibleInputs: 1,
   calculations: 0,
@@ -120,6 +124,7 @@ function App(Props) {
                           handleLastDestinationChange: handleLastDestinationChange,
                           dispatch: dispatch
                         })), React.createElement("button", {
+                      style: buttonStyles,
                       onClick: (function ($$event) {
                           $$event.preventDefault();
                           Curry._1(dispatch, /* AddNewInput */0);
@@ -133,6 +138,7 @@ function App(Props) {
 var make = App;
 
 exports.wrapperStyles = wrapperStyles;
+exports.buttonStyles = buttonStyles;
 exports.initialState = initialState;
 exports.reducer = reducer;
 exports.calculateDistanceThenCreateNewInput = calculateDistanceThenCreateNewInput;

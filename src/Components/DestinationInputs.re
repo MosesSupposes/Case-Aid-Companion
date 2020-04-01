@@ -1,10 +1,14 @@
+let wrapperStyles = ReactDOMRe.Style.make(~margin=".75rem 0", ());
+let inputStyles = ReactDOMRe.Style.make(~margin="0 .5rem", ());
+
 [@react.component]
 let make =
     (~handleLastStartingPointChange, ~handleLastDestinationChange, ~dispatch) => {
-  <div>
+  <div style=wrapperStyles>
     <label>
       {ReasonReact.string("From:")}
       <input
+        style=inputStyles
         type_="text"
         className="from"
         onChange={event => handleLastStartingPointChange(event, dispatch)}
@@ -13,6 +17,7 @@ let make =
     <label>
       {ReasonReact.string("To:")}
       <input
+        style=inputStyles
         type_="text"
         className="to"
         onChange={event => handleLastDestinationChange(event, dispatch)}

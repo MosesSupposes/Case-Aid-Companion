@@ -2,6 +2,7 @@
 
 let wrapperStyles =
   ReactDOMRe.Style.make(~display="flex", ~justifyContent="space-around", ());
+let buttonStyles = ReactDOMRe.Style.make(~marginTop=".35rem", ());
 
 type state = {
   visibleInputs: int,
@@ -132,6 +133,7 @@ let make = () => {
          ),
        )}
       <button
+        style=buttonStyles
         onClick={event => {
           ReactEvent.Mouse.preventDefault(event);
           calculateDistanceThenCreateNewInput(dispatch);
