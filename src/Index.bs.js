@@ -25,7 +25,7 @@ function makeContainer(text) {
   return content;
 }
 
-ReactDom.render(React.createElement(App$ReasonReactExamples.make, { }), makeContainer("Mommy Maps"));
+ReactDom.render(React.createElement(App$ReasonReactExamples.make, { }), makeContainer("Case Aid Companion"));
 
 exports.style = style;
 exports.makeContainer = makeContainer;

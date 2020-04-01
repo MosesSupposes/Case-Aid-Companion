@@ -48,4 +48,4 @@ let makeContainer = text => {
 //   makeContainer("Reason Using JS Using Reason"),
 // );
 
-ReactDOMRe.render(<App />, makeContainer("Mommy Maps"));
+ReactDOMRe.render(<App />, makeContainer("Case Aid Companion"));
