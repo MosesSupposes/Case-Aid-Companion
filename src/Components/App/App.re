@@ -119,7 +119,6 @@ let undoLastCalculation = (event, dispatch, state) => {
     | exception Stack.Empty => 0.0
     | value => value
     };
-  ();
 
   /* Depending on whether the stack stored in state is empty or not, this returns
       either a new stack wih the single value of 0.0 on it or it returns the existing
