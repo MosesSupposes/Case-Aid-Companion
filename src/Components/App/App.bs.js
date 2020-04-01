@@ -138,18 +138,24 @@ function handleLastDestinationChange($$event, dispatch) {
 function undoLastCalculation($$event, dispatch, state) {
   var lastItemOnStack;
   try {
-    lastItemOnStack = state.everyCalculation;
+    lastItemOnStack = Stack.top(state.everyCalculation);
   }
   catch (exn){
     if (exn === Stack.Empty) {
-      var s = Stack.create(/* () */0);
-      Stack.push(0.0, s);
-      lastItemOnStack = s;
+      lastItemOnStack = 0.0;
     } else {
       throw exn;
     }
   }
-  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(lastItemOnStack)])]));
+  var stackToPopOff;
+  if (lastItemOnStack !== 0.0) {
+    stackToPopOff = state.everyCalculation;
+  } else {
+    var newStack = Stack.create(/* () */0);
+    Stack.push(0.0, newStack);
+    stackToPopOff = newStack;
+  }
+  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(stackToPopOff)])]));
 }
 
 function App(Props) {
