@@ -61,7 +61,8 @@ To serve the files, this template uses a minimal dependency called `moduleserve`
 
 By the way, ReasonReact comes with a small [router](https://reasonml.github.io/reason-react/docs/en/router) you might be interested in.
 
-# TODO
+# Todo
 
 - Add a changelog 🗒
 - Deploy 🚀
+- Auto-populate the next "From" input with the value of the last "To" input.
