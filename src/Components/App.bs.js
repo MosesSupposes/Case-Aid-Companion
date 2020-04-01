@@ -8,16 +8,28 @@ var $$String = require("bs-platform/lib/js/string.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
+var UndoButton$ReasonReactExamples = require("./UndoButton.bs.js");
 var TotalDistance$ReasonReactExamples = require("./TotalDistance.bs.js");
 var DestinationInputs$ReasonReactExamples = require("./DestinationInputs.bs.js");
 
 var wrapperStyles = {
   display: "flex",
+  flexWrap: "wrap",
   justifyContent: "space-around"
 };
 
-var buttonStyles = {
+var nextDestinationButtonStyles = {
   marginTop: ".35rem"
+};
+
+var undoButtonStyles = {
+  flexBasis: "100%"
+};
+
+var rightSideOfPageStyles = {
+  display: "flex",
+  alignItems: "flex-end",
+  flexDirection: "column"
 };
 
 var initialState = {
@@ -146,24 +158,29 @@ function App(Props) {
             }, React.createElement("form", undefined, Caml_array.caml_make_vect(state.visibleInputs, React.createElement(DestinationInputs$ReasonReactExamples.make, {
                           dispatch: dispatch,
                           handleLastStartingPointChange: handleLastStartingPointChange,
-                          handleLastDestinationChange: handleLastDestinationChange,
-                          undoLastCalculation: undoLastCalculation
+                          handleLastDestinationChange: handleLastDestinationChange
                         })), React.createElement("button", {
-                      style: buttonStyles,
+                      style: nextDestinationButtonStyles,
                       onClick: (function ($$event) {
                           $$event.preventDefault();
                           Curry._1(dispatch, /* AddNewInput */0);
                           return Curry._1(dispatch, /* CalculateDistance */1);
                         })
-                    }, "Next destination")), React.createElement(TotalDistance$ReasonReactExamples.make, {
-                  distance: Pervasives.string_of_float(state.totalDistance)
-                }));
+                    }, "Next destination")), React.createElement("div", {
+                  style: rightSideOfPageStyles
+                }, React.createElement(TotalDistance$ReasonReactExamples.make, {
+                      distance: Pervasives.string_of_float(state.totalDistance)
+                    }), React.createElement(UndoButton$ReasonReactExamples.make, {
+                      undoLastCalculation: undoLastCalculation
+                    })));
 }
 
 var make = App;
 
 exports.wrapperStyles = wrapperStyles;
-exports.buttonStyles = buttonStyles;
+exports.nextDestinationButtonStyles = nextDestinationButtonStyles;
+exports.undoButtonStyles = undoButtonStyles;
+exports.rightSideOfPageStyles = rightSideOfPageStyles;
 exports.initialState = initialState;
 exports.reducer = reducer;
 exports.calculateDistanceThenCreateNewInput = calculateDistanceThenCreateNewInput;

@@ -1,8 +1,22 @@
 [@bs.val] external fetch: string => Js.Promise.t('a) = "fetch";
 
 let wrapperStyles =
-  ReactDOMRe.Style.make(~display="flex", ~justifyContent="space-around", ());
-let buttonStyles = ReactDOMRe.Style.make(~marginTop=".35rem", ());
+  ReactDOMRe.Style.make(
+    ~display="flex",
+    ~justifyContent="space-around",
+    ~flexWrap="wrap",
+    (),
+  );
+let nextDestinationButtonStyles =
+  ReactDOMRe.Style.make(~marginTop=".35rem", ());
+let undoButtonStyles = ReactDOMRe.Style.make(~flexBasis="100%", ());
+let rightSideOfPageStyles =
+  ReactDOMRe.Style.make(
+    ~display="flex",
+    ~flexDirection="column",
+    ~alignItems="flex-end",
+    (),
+  );
 
 type state = {
   visibleInputs: int,
@@ -140,12 +154,11 @@ let make = () => {
              dispatch
              handleLastStartingPointChange
              handleLastDestinationChange
-             undoLastCalculation
            />,
          ),
        )}
       <button
-        style=buttonStyles
+        style=nextDestinationButtonStyles
         onClick={event => {
           ReactEvent.Mouse.preventDefault(event);
           calculateDistanceThenCreateNewInput(dispatch);
@@ -153,6 +166,9 @@ let make = () => {
         {ReasonReact.string("Next destination")}
       </button>
     </form>
-    <TotalDistance distance={string_of_float(state.totalDistance)} />
+    <div style=rightSideOfPageStyles>
+      <TotalDistance distance={string_of_float(state.totalDistance)} />
+      <UndoButton undoLastCalculation />
+    </div>
   </div>;
 };
