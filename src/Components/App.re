@@ -8,17 +8,20 @@ type state = {
   calculations: int,
   lastStartingPoint: string,
   lastDestination: string,
+  totalDistance: int,
 };
 type action('a) =
   | AddNewInput
   | RemoveInput
   | CalculateDistance
   | UpdateLastStartingPoint(ReactEvent.synthetic('a))
-  | UpdateLastDestination(ReactEvent.synthetic('a));
+  | UpdateLastDestination(ReactEvent.synthetic('a))
+  | IncreaseTotalDistance(int);
 
 let initialState = {
   visibleInputs: 1,
   calculations: 0,
+  totalDistance: 0,
   lastStartingPoint: "",
   lastDestination: "",
 };
@@ -35,6 +38,10 @@ let reducer = (state, action) => {
   | UpdateLastDestination(event) => {
       ...state,
       lastDestination: ReactEvent.Synthetic.target(event)##value,
+    }
+  | IncreaseTotalDistance(amount) => {
+      ...state,
+      totalDistance: state.totalDistance + amount,
     }
   };
 };
@@ -78,7 +85,25 @@ let make = () => {
         fetch(distanceMatrixFullUrl)
         |> then_(response => response##json())
         |> then_(jsonResponse => {
-             //  setState(_previousState => LoadedDogs(jsonResponse##message));
+             let constructIncreaseTotalDistance = x =>
+               IncreaseTotalDistance(x);
+
+             let distance: string = [%bs.raw
+               {|
+                 (jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0"
+                |}
+             ];
+
+             let log: unit = [%bs.raw {| console.log("AYO", distance)|}];
+
+             distance
+             |> String.split_on_char(' ')
+             |> List.hd
+             |> float_of_string
+             |> int_of_float
+             |> constructIncreaseTotalDistance
+             |> dispatch;
+
              Js.log(jsonResponse);
              Js.Promise.resolve();
            })
@@ -115,6 +140,6 @@ let make = () => {
         {ReasonReact.string("Next destination")}
       </button>
     </form>
-    <TotalDistance distance="0" />
+    <TotalDistance distance={string_of_int(state.totalDistance)} />
   </div>;
 };

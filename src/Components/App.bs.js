@@ -1,9 +1,12 @@
 'use strict';
 
+var List = require("bs-platform/lib/js/list.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var $$String = require("bs-platform/lib/js/string.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
+var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var TotalDistance$ReasonReactExamples = require("./TotalDistance.bs.js");
 var DestinationInputs$ReasonReactExamples = require("./DestinationInputs.bs.js");
 
@@ -16,7 +19,8 @@ var initialState = {
   visibleInputs: 1,
   calculations: 0,
   lastStartingPoint: "",
-  lastDestination: ""
+  lastDestination: "",
+  totalDistance: 0
 };
 
 function reducer(state, action) {
@@ -27,7 +31,8 @@ function reducer(state, action) {
                   visibleInputs: state.visibleInputs + 1 | 0,
                   calculations: state.calculations,
                   lastStartingPoint: state.lastStartingPoint,
-                  lastDestination: state.lastDestination
+                  lastDestination: state.lastDestination,
+                  totalDistance: state.totalDistance
                 };
       case /* RemoveInput */1 :
           return state;
@@ -36,24 +41,39 @@ function reducer(state, action) {
                   visibleInputs: state.visibleInputs,
                   calculations: state.calculations + 1 | 0,
                   lastStartingPoint: state.lastStartingPoint,
-                  lastDestination: state.lastDestination
+                  lastDestination: state.lastDestination,
+                  totalDistance: state.totalDistance
                 };
       
     }
-  } else if (action.tag) {
-    return {
-            visibleInputs: state.visibleInputs,
-            calculations: state.calculations,
-            lastStartingPoint: state.lastStartingPoint,
-            lastDestination: action[0].target.value
-          };
   } else {
-    return {
-            visibleInputs: state.visibleInputs,
-            calculations: state.calculations,
-            lastStartingPoint: action[0].target.value,
-            lastDestination: state.lastDestination
-          };
+    switch (action.tag | 0) {
+      case /* UpdateLastStartingPoint */0 :
+          return {
+                  visibleInputs: state.visibleInputs,
+                  calculations: state.calculations,
+                  lastStartingPoint: action[0].target.value,
+                  lastDestination: state.lastDestination,
+                  totalDistance: state.totalDistance
+                };
+      case /* UpdateLastDestination */1 :
+          return {
+                  visibleInputs: state.visibleInputs,
+                  calculations: state.calculations,
+                  lastStartingPoint: state.lastStartingPoint,
+                  lastDestination: action[0].target.value,
+                  totalDistance: state.totalDistance
+                };
+      case /* IncreaseTotalDistance */2 :
+          return {
+                  visibleInputs: state.visibleInputs,
+                  calculations: state.calculations,
+                  lastStartingPoint: state.lastStartingPoint,
+                  lastDestination: state.lastDestination,
+                  totalDistance: state.totalDistance + action[0] | 0
+                };
+      
+    }
   }
 }
 
@@ -81,6 +101,9 @@ function App(Props) {
           fetch(distanceMatrixFullUrl).then((function (response) {
                       return response.json();
                     })).then((function (jsonResponse) {
+                    var distance = ((jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0");
+                    ((console.log("AYO", distance)));
+                    Curry._1(dispatch, /* IncreaseTotalDistance */Block.__(2, [Caml_format.caml_float_of_string(List.hd($$String.split_on_char(/* " " */32, distance))) | 0]));
                     console.log(jsonResponse);
                     return Promise.resolve(/* () */0);
                   })).catch((function (_err) {
@@ -102,7 +125,7 @@ function App(Props) {
                           return Curry._1(dispatch, /* CalculateDistance */2);
                         })
                     }, "Next destination")), React.createElement(TotalDistance$ReasonReactExamples.make, {
-                  distance: "0"
+                  distance: String(state.totalDistance)
                 }));
 }
 
