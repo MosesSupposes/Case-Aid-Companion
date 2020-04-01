@@ -29,7 +29,6 @@ let rightSideOfPageStyles =
 /**
  * =============== Types ===============
  *  */
-
 type state = {
   visibleInputs: int,
   calculations: int,
@@ -37,6 +36,7 @@ type state = {
   lastDestination: string,
   totalDistance: float,
   lastDistanceAdded: float,
+  // everyCalculation: Stack.t,
 };
 
 type calculation =
@@ -62,6 +62,7 @@ let initialState = {
   lastDistanceAdded: 0.0,
   lastStartingPoint: "",
   lastDestination: "",
+  everyCalculation: Stack.Stack([||]),
 };
 
 let reducer = (state, action) => {
