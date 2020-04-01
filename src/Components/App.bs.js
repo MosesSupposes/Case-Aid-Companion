@@ -41,7 +41,6 @@ var initialState = {
   lastStartingPoint: "",
   lastDestination: "",
   totalDistance: 0.0,
-  lastDistanceAdded: 0.0,
   everyCalculation: initialState_everyCalculation
 };
 
@@ -54,7 +53,6 @@ function reducer(state, action) {
               lastStartingPoint: state.lastStartingPoint,
               lastDestination: state.lastDestination,
               totalDistance: state.totalDistance,
-              lastDistanceAdded: state.lastDistanceAdded,
               everyCalculation: state.everyCalculation
             };
     } else {
@@ -64,7 +62,6 @@ function reducer(state, action) {
               lastStartingPoint: state.lastStartingPoint,
               lastDestination: state.lastDestination,
               totalDistance: state.totalDistance,
-              lastDistanceAdded: state.lastDistanceAdded,
               everyCalculation: state.everyCalculation
             };
     }
@@ -79,7 +76,6 @@ function reducer(state, action) {
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
                     totalDistance: state.totalDistance - match[0],
-                    lastDistanceAdded: state.lastDistanceAdded,
                     everyCalculation: state.everyCalculation
                   };
           } else {
@@ -92,7 +88,6 @@ function reducer(state, action) {
                   lastStartingPoint: action[0].target.value,
                   lastDestination: state.lastDestination,
                   totalDistance: state.totalDistance,
-                  lastDistanceAdded: state.lastDistanceAdded,
                   everyCalculation: state.everyCalculation
                 };
       case /* UpdateLastDestination */2 :
@@ -102,7 +97,6 @@ function reducer(state, action) {
                   lastStartingPoint: state.lastStartingPoint,
                   lastDestination: action[0].target.value,
                   totalDistance: state.totalDistance,
-                  lastDistanceAdded: state.lastDistanceAdded,
                   everyCalculation: state.everyCalculation
                 };
       case /* IncreaseTotalDistance */3 :
@@ -111,13 +105,13 @@ function reducer(state, action) {
             return state;
           } else {
             var amount = match$1[0];
+            Stack.push(amount, state.everyCalculation);
             return {
                     visibleInputs: state.visibleInputs,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
                     totalDistance: state.totalDistance + amount,
-                    lastDistanceAdded: amount,
                     everyCalculation: state.everyCalculation
                   };
           }
@@ -142,7 +136,20 @@ function handleLastDestinationChange($$event, dispatch) {
 }
 
 function undoLastCalculation($$event, dispatch, state) {
-  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [state.lastDistanceAdded])]));
+  var lastItemOnStack;
+  try {
+    lastItemOnStack = state.everyCalculation;
+  }
+  catch (exn){
+    if (exn === Stack.Empty) {
+      var s = Stack.create(/* () */0);
+      Stack.push(0.0, s);
+      lastItemOnStack = s;
+    } else {
+      throw exn;
+    }
+  }
+  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(lastItemOnStack)])]));
 }
 
 function App(Props) {
