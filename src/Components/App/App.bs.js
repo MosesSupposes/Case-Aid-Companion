@@ -9,9 +9,9 @@ var $$String = require("bs-platform/lib/js/string.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
-var UndoButton$ReasonReactExamples = require("./UndoButton.bs.js");
-var TotalDistance$ReasonReactExamples = require("./TotalDistance.bs.js");
-var DestinationInputs$ReasonReactExamples = require("./DestinationInputs.bs.js");
+var UndoButton$ReasonReactExamples = require("../UndoButton/UndoButton.bs.js");
+var TotalDistance$ReasonReactExamples = require("../TotalDistance/TotalDistance.bs.js");
+var DestinationInputs$ReasonReactExamples = require("../DestinationInputs/DestinationInputs.bs.js");
 
 var wrapperStyles = {
   display: "flex",

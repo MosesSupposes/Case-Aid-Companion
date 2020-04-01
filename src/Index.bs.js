@@ -2,7 +2,7 @@
 
 var React = require("react");
 var ReactDom = require("react-dom");
-var App$ReasonReactExamples = require("./Components/App.bs.js");
+var App$ReasonReactExamples = require("./Components/App/App.bs.js");
 var ExampleStyles$ReasonReactExamples = require("./Components/Examples/ExampleStyles.bs.js");
 
 var style = document.createElement("style");

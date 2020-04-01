@@ -29,6 +29,7 @@ let rightSideOfPageStyles =
 /**
  * =============== Types ===============
  *  */
+
 type state = {
   visibleInputs: int,
   calculations: int,
