@@ -115,11 +115,11 @@ let handleLastDestinationChange = (event, dispatch) => {
 let undoLastCalculation = (event, dispatch, state) => {
   let lastItemOnStack =
     switch (state.everyCalculation) {
-    | value => value
     | exception Stack.Empty =>
       let s = Stack.create();
       Stack.push(0.0, s);
       s;
+    | value => value
     };
 
   lastItemOnStack
