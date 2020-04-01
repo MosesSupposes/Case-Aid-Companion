@@ -8,7 +8,7 @@ type state = {
   calculations: int,
   lastStartingPoint: string,
   lastDestination: string,
-  totalDistance: int,
+  totalDistance: float,
 };
 type action('a) =
   | AddNewInput
@@ -16,12 +16,12 @@ type action('a) =
   | CalculateDistance
   | UpdateLastStartingPoint(ReactEvent.synthetic('a))
   | UpdateLastDestination(ReactEvent.synthetic('a))
-  | IncreaseTotalDistance(int);
+  | IncreaseTotalDistance(float);
 
 let initialState = {
   visibleInputs: 1,
   calculations: 0,
-  totalDistance: 0,
+  totalDistance: 0.0,
   lastStartingPoint: "",
   lastDestination: "",
 };
@@ -41,7 +41,7 @@ let reducer = (state, action) => {
     }
   | IncreaseTotalDistance(amount) => {
       ...state,
-      totalDistance: state.totalDistance + amount,
+      totalDistance: state.totalDistance +. amount,
     }
   };
 };
@@ -100,7 +100,6 @@ let make = () => {
              |> String.split_on_char(' ')
              |> List.hd
              |> float_of_string
-             |> int_of_float
              |> constructIncreaseTotalDistance
              |> dispatch;
 
@@ -140,6 +139,6 @@ let make = () => {
         {ReasonReact.string("Next destination")}
       </button>
     </form>
-    <TotalDistance distance={string_of_int(state.totalDistance)} />
+    <TotalDistance distance={string_of_float(state.totalDistance)} />
   </div>;
 };

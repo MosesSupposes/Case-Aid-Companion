@@ -6,6 +6,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
+var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var TotalDistance$ReasonReactExamples = require("./TotalDistance.bs.js");
 var DestinationInputs$ReasonReactExamples = require("./DestinationInputs.bs.js");
@@ -20,7 +21,7 @@ var initialState = {
   calculations: 0,
   lastStartingPoint: "",
   lastDestination: "",
-  totalDistance: 0
+  totalDistance: 0.0
 };
 
 function reducer(state, action) {
@@ -70,7 +71,7 @@ function reducer(state, action) {
                   calculations: state.calculations,
                   lastStartingPoint: state.lastStartingPoint,
                   lastDestination: state.lastDestination,
-                  totalDistance: state.totalDistance + action[0] | 0
+                  totalDistance: state.totalDistance + action[0]
                 };
       
     }
@@ -103,7 +104,7 @@ function App(Props) {
                     })).then((function (jsonResponse) {
                     var distance = ((jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0");
                     ((console.log("AYO", distance)));
-                    Curry._1(dispatch, /* IncreaseTotalDistance */Block.__(2, [Caml_format.caml_float_of_string(List.hd($$String.split_on_char(/* " " */32, distance))) | 0]));
+                    Curry._1(dispatch, /* IncreaseTotalDistance */Block.__(2, [Caml_format.caml_float_of_string(List.hd($$String.split_on_char(/* " " */32, distance)))]));
                     console.log(jsonResponse);
                     return Promise.resolve(/* () */0);
                   })).catch((function (_err) {
@@ -125,7 +126,7 @@ function App(Props) {
                           return Curry._1(dispatch, /* CalculateDistance */2);
                         })
                     }, "Next destination")), React.createElement(TotalDistance$ReasonReactExamples.make, {
-                  distance: String(state.totalDistance)
+                  distance: Pervasives.string_of_float(state.totalDistance)
                 }));
 }
 
