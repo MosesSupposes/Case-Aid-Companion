@@ -35,7 +35,6 @@ type state = {
   lastStartingPoint: string,
   lastDestination: string,
   totalDistance: float,
-  lastDistanceAdded: float,
   everyCalculation: Stack.t(float),
 };
 
@@ -59,7 +58,6 @@ let initialState = {
   visibleInputs: 1,
   calculations: 0,
   totalDistance: 0.0,
-  lastDistanceAdded: 0.0,
   lastStartingPoint: "",
   lastDestination: "",
   everyCalculation: Stack.create(),
@@ -73,6 +71,11 @@ let reducer = (state, action) => {
       totalDistance: state.totalDistance -. amount,
       visibleInputs: state.visibleInputs - 1,
     }
+
+  /*  This triggers the useEffect to run, which, in turn, reads from the last
+      starting point and the last destination, and calculates the distance between
+      the two.
+      */
   | CalculateDistance => {...state, calculations: state.calculations + 1}
   | UpdateLastStartingPoint(event) => {
       ...state,
@@ -82,11 +85,9 @@ let reducer = (state, action) => {
       ...state,
       lastDestination: ReactEvent.Synthetic.target(event)##value,
     }
-  | IncreaseTotalDistance(AmountToAdd(amount)) => {
-      ...state,
-      totalDistance: state.totalDistance +. amount,
-      lastDistanceAdded: amount,
-    }
+  | IncreaseTotalDistance(AmountToAdd(amount)) =>
+    Stack.push(amount, state.everyCalculation);
+    {...state, totalDistance: state.totalDistance +. amount};
   | _ => state
   };
 };
@@ -110,8 +111,22 @@ let handleLastDestinationChange = (event, dispatch) => {
   dispatch(UpdateLastDestination(event));
 };
 
-let undoLastCalculation = (event, dispatch, state) =>
-  dispatch(RemoveInput(AmountToSubtract(state.lastDistanceAdded)));
+let undoLastCalculation = (event, dispatch, state) => {
+  let lastItemOnStack =
+    switch (state.everyCalculation) {
+    | value => value
+    | exception Stack.Empty =>
+      let s = Stack.create();
+      Stack.push(0.0, s);
+      s;
+    };
+
+  lastItemOnStack
+  |> Stack.pop
+  |> (x => AmountToSubtract(x))
+  |> (x => RemoveInput(x))
+  |> dispatch;
+};
 
 /**
  * =============== Main ===============
@@ -141,9 +156,6 @@ let make = () => {
         fetch(distanceMatrixFullUrl)
         |> then_(response => response##json())
         |> then_(jsonResponse => {
-             let constructIncreaseTotalDistance = x =>
-               IncreaseTotalDistance(AmountToAdd(x));
-
              let distance: string = [%bs.raw
                {|
                  (jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0"
@@ -155,7 +167,7 @@ let make = () => {
              |> String.split_on_char(' ')
              |> List.hd
              |> float_of_string
-             |> constructIncreaseTotalDistance
+             |> (x => IncreaseTotalDistance(AmountToAdd(x)))
              |> dispatch;
 
              Js.Promise.resolve();
