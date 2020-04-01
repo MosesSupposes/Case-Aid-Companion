@@ -12,9 +12,10 @@ var inputStyles = {
 };
 
 function DestinationInputs(Props) {
+  var dispatch = Props.dispatch;
   var handleLastStartingPointChange = Props.handleLastStartingPointChange;
   var handleLastDestinationChange = Props.handleLastDestinationChange;
-  var dispatch = Props.dispatch;
+  Props.undoLastCalculation;
   return React.createElement("div", {
               style: wrapperStyles
             }, React.createElement("label", undefined, "From:", React.createElement("input", {

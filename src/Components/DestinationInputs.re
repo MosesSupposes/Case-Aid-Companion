@@ -3,7 +3,12 @@ let inputStyles = ReactDOMRe.Style.make(~margin="0 .5rem", ());
 
 [@react.component]
 let make =
-    (~handleLastStartingPointChange, ~handleLastDestinationChange, ~dispatch) => {
+    (
+      ~dispatch,
+      ~handleLastStartingPointChange,
+      ~handleLastDestinationChange,
+      ~undoLastCalculation,
+    ) => {
   <div style=wrapperStyles>
     <label>
       {ReasonReact.string("From:")}

@@ -53,14 +53,14 @@ function reducer(state, action) {
   } else {
     switch (action.tag | 0) {
       case /* RemoveInput */0 :
-          var amount = action[0];
-          if (amount.tag) {
+          var match = action[0];
+          if (match.tag) {
             return {
                     visibleInputs: state.visibleInputs,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
-                    totalDistance: state.totalDistance - amount[0],
+                    totalDistance: state.totalDistance - match[0],
                     lastDistanceAdded: state.lastDistanceAdded
                   };
           } else {
@@ -85,8 +85,8 @@ function reducer(state, action) {
                   lastDistanceAdded: state.lastDistanceAdded
                 };
       case /* IncreaseTotalDistance */3 :
-          var amount$1 = action[0];
-          if (amount$1.tag) {
+          var match$1 = action[0];
+          if (match$1.tag) {
             return state;
           } else {
             return {
@@ -94,7 +94,7 @@ function reducer(state, action) {
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
-                    totalDistance: state.totalDistance + amount$1[0],
+                    totalDistance: state.totalDistance + match$1[0],
                     lastDistanceAdded: state.lastDistanceAdded
                   };
           }
@@ -116,6 +116,10 @@ function handleLastStartingPointChange($$event, dispatch) {
 function handleLastDestinationChange($$event, dispatch) {
   $$event.persist();
   return Curry._1(dispatch, /* UpdateLastDestination */Block.__(2, [$$event]));
+}
+
+function undoLastCalculation($$event, dispatch) {
+  return /* () */0;
 }
 
 function App(Props) {
@@ -140,9 +144,10 @@ function App(Props) {
   return React.createElement("div", {
               style: wrapperStyles
             }, React.createElement("form", undefined, Caml_array.caml_make_vect(state.visibleInputs, React.createElement(DestinationInputs$ReasonReactExamples.make, {
+                          dispatch: dispatch,
                           handleLastStartingPointChange: handleLastStartingPointChange,
                           handleLastDestinationChange: handleLastDestinationChange,
-                          dispatch: dispatch
+                          undoLastCalculation: undoLastCalculation
                         })), React.createElement("button", {
                       style: buttonStyles,
                       onClick: (function ($$event) {
@@ -164,5 +169,6 @@ exports.reducer = reducer;
 exports.calculateDistanceThenCreateNewInput = calculateDistanceThenCreateNewInput;
 exports.handleLastStartingPointChange = handleLastStartingPointChange;
 exports.handleLastDestinationChange = handleLastDestinationChange;
+exports.undoLastCalculation = undoLastCalculation;
 exports.make = make;
 /* react Not a pure module */

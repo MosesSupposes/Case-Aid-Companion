@@ -37,13 +37,9 @@ let initialState = {
 let reducer = (state, action) => {
   switch (action) {
   | AddNewInput => {...state, visibleInputs: state.visibleInputs + 1}
-  | RemoveInput(amount) =>
-    switch (amount) {
-    | AmountToSubtract(amount) => {
-        ...state,
-        totalDistance: state.totalDistance -. amount,
-      }
-    | _ => state
+  | RemoveInput(AmountToSubtract(amount)) => {
+      ...state,
+      totalDistance: state.totalDistance -. amount,
     }
   | CalculateDistance => {...state, calculations: state.calculations + 1}
   | UpdateLastStartingPoint(event) => {
@@ -54,14 +50,11 @@ let reducer = (state, action) => {
       ...state,
       lastDestination: ReactEvent.Synthetic.target(event)##value,
     }
-  | IncreaseTotalDistance(amount) =>
-    switch (amount) {
-    | AmountToAdd(amount) => {
-        ...state,
-        totalDistance: state.totalDistance +. amount,
-      }
-    | _ => state
+  | IncreaseTotalDistance(AmountToAdd(amount)) => {
+      ...state,
+      totalDistance: state.totalDistance +. amount,
     }
+  | _ => state
   };
 };
 
@@ -79,6 +72,8 @@ let handleLastDestinationChange = (event, dispatch) => {
   ReactEvent.Synthetic.persist(event);
   dispatch(UpdateLastDestination(event));
 };
+
+let undoLastCalculation = (event, dispatch) => ();
 
 [@react.component]
 let make = () => {
@@ -142,9 +137,10 @@ let make = () => {
          Array.make(
            state.visibleInputs,
            <DestinationInputs
+             dispatch
              handleLastStartingPointChange
              handleLastDestinationChange
-             dispatch
+             undoLastCalculation
            />,
          ),
        )}
