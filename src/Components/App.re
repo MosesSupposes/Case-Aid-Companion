@@ -36,7 +36,7 @@ type state = {
   lastDestination: string,
   totalDistance: float,
   lastDistanceAdded: float,
-  // everyCalculation: Stack.t,
+  everyCalculation: Stack.t(float),
 };
 
 type calculation =
@@ -62,7 +62,7 @@ let initialState = {
   lastDistanceAdded: 0.0,
   lastStartingPoint: "",
   lastDestination: "",
-  everyCalculation: Stack.Stack([||]),
+  everyCalculation: Stack.create(),
 };
 
 let reducer = (state, action) => {

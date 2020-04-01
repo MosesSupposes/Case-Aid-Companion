@@ -3,6 +3,7 @@
 var List = require("bs-platform/lib/js/list.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Stack = require("bs-platform/lib/js/stack.js");
 var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
@@ -32,7 +33,7 @@ var rightSideOfPageStyles = {
   flexDirection: "column"
 };
 
-var initialState_everyCalculation = /* Stack */[[]];
+var initialState_everyCalculation = Stack.create(/* () */0);
 
 var initialState = {
   visibleInputs: 1,
@@ -200,4 +201,4 @@ exports.handleLastStartingPointChange = handleLastStartingPointChange;
 exports.handleLastDestinationChange = handleLastDestinationChange;
 exports.undoLastCalculation = undoLastCalculation;
 exports.make = make;
-/* react Not a pure module */
+/* initialState Not a pure module */
