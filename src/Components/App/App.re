@@ -70,7 +70,9 @@ let reducer = (state, action) => {
   | RemoveInput(AmountToSubtract(amount)) => {
       ...state,
       totalDistance: state.totalDistance -. amount,
-      visibleInputs: state.visibleInputs - 1,
+      visibleInputs:
+        state.visibleInputs > 0
+          ? state.visibleInputs - 1 : state.visibleInputs,
     }
 
   /*  This triggers the useEffect to run, which, in turn, reads from the last

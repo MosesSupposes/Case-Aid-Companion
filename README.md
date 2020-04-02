@@ -66,4 +66,3 @@ By the way, ReasonReact comes with a small [router](https://reasonml.github.io/r
 - Add a changelog 🗒
 - Deploy 🚀
 - Auto-populate the next "From" input with the value of the last "To" input.
-- Fix bug that causes app to crash when pressing the "Undo" button once the total distance is at 0 miles.

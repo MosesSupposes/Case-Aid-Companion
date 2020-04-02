@@ -71,7 +71,7 @@ function reducer(state, action) {
           var match = action[0];
           if (match.tag) {
             return {
-                    visibleInputs: state.visibleInputs - 1 | 0,
+                    visibleInputs: state.visibleInputs > 0 ? state.visibleInputs - 1 | 0 : state.visibleInputs,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
