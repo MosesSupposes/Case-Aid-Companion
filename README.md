@@ -66,3 +66,12 @@ By the way, ReasonReact comes with a small [router](https://reasonml.github.io/r
 - Add a changelog 🗒
 - Deploy 🚀
 - Auto-populate the next "From" input with the value of the last "To" input.
+
+# Bugs
+
+- Fix the bug that's described in this scenario: A user fills in the
+  Destination Inputs at least once and a total distance is computed. The user
+  then undos that last calculation(s) however many times until there are no
+  calculations left and the total distance is zero. The user then presses the
+  "Next Destination" button and the total distance should still be zero, but
+  instead gets set to whatever the last value that was calculated was.
