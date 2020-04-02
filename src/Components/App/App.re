@@ -113,30 +113,17 @@ let handleLastDestinationChange = (event, dispatch) => {
 };
 
 let undoLastCalculation = (event, dispatch, state) => {
-  let isEmpty = (s: Stack.t('a)) => Stack.top(s) == Stack.Empty;
   let lastItemOnStack =
-    switch (Stack.top(state.everyCalculation)) {
-    | exception Stack.Empty => 0.0
-    | value => value
-    };
+    Stack.is_empty(state.everyCalculation)
+      ? 0.0 : Stack.top(state.everyCalculation);
 
-  /* Depending on whether the stack stored in state is empty or not, this returns
-      either a new stack wih the single value of 0.0 on it or it returns the existing
-      stack that's stored on state. This is because the line below this value pops off
-      the stack on state and subtracts that value from the total distance traveled.
-      This logic is in place to prevent the edge case that causes a runtime error when
-      trying to pop off of an empty stack.
-     */
-  let stackToPopOff =
-    switch (lastItemOnStack) {
-    | 0.0 =>
-      let newStack = Stack.create();
-      Stack.push(0.0, newStack);
-      newStack;
-    | nonZeroValue => state.everyCalculation
-    };
+  // push 0.0 onto the stack if it's emptyy
+  if (lastItemOnStack == 0.0) {
+    Stack.push(0.0, state.everyCalculation);
+    ();
+  };
 
-  Stack.pop(stackToPopOff)
+  Stack.pop(state.everyCalculation)
   |> (x => AmountToSubtract(x))
   |> (x => RemoveInput(x))
   |> dispatch;

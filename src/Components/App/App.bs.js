@@ -136,26 +136,11 @@ function handleLastDestinationChange($$event, dispatch) {
 }
 
 function undoLastCalculation($$event, dispatch, state) {
-  var lastItemOnStack;
-  try {
-    lastItemOnStack = Stack.top(state.everyCalculation);
+  var lastItemOnStack = Stack.is_empty(state.everyCalculation) ? 0.0 : Stack.top(state.everyCalculation);
+  if (lastItemOnStack === 0.0) {
+    Stack.push(0.0, state.everyCalculation);
   }
-  catch (exn){
-    if (exn === Stack.Empty) {
-      lastItemOnStack = 0.0;
-    } else {
-      throw exn;
-    }
-  }
-  var stackToPopOff;
-  if (lastItemOnStack !== 0.0) {
-    stackToPopOff = state.everyCalculation;
-  } else {
-    var newStack = Stack.create(/* () */0);
-    Stack.push(0.0, newStack);
-    stackToPopOff = newStack;
-  }
-  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(stackToPopOff)])]));
+  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(state.everyCalculation)])]));
 }
 
 function App(Props) {
