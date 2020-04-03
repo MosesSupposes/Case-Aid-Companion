@@ -136,8 +136,8 @@ function handleLastDestinationChange($$event, dispatch) {
 }
 
 function undoLastCalculation($$event, dispatch, state) {
-  var lastItemOnStack = Stack.is_empty(state.everyCalculation) ? 0.0 : Stack.top(state.everyCalculation);
-  if (lastItemOnStack === 0.0) {
+  var lastItemOnStack = Stack.is_empty(state.everyCalculation) ? undefined : Stack.top(state.everyCalculation);
+  if (lastItemOnStack === undefined) {
     Stack.push(0.0, state.everyCalculation);
   }
   return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(state.everyCalculation)])]));

@@ -117,10 +117,10 @@ let handleLastDestinationChange = (event, dispatch) => {
 let undoLastCalculation = (event, dispatch, state) => {
   let lastItemOnStack =
     Stack.is_empty(state.everyCalculation)
-      ? 0.0 : Stack.top(state.everyCalculation);
+      ? None : Some(Stack.top(state.everyCalculation));
 
   // push 0.0 onto the stack if it's emptyy
-  if (lastItemOnStack == 0.0) {
+  if (lastItemOnStack == None) {
     Stack.push(0.0, state.everyCalculation);
     ();
   };
