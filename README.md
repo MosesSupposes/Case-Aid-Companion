@@ -69,5 +69,7 @@ By the way, ReasonReact comes with a small [router](https://reasonml.github.io/r
 
 # Bugs
 
-- When a user clicks the "Undo" button, the last distance calculated gets
-  undone, but then when they click "Next Destination" again, the last undone calculation gets added back to the total.
+- When a user clicks the "Undo" button all the way until there are no inputs
+  left on the screen, the last distance calculated gets undone, but then when they click "Next Destination" again, the last undone calculation gets added back to the total. The expected behavior is that when they press "Next
+  Destination" a new DestinationInpu is rendered and the total remains at 0
+  miles.
