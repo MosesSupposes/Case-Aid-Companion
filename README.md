@@ -69,5 +69,5 @@ By the way, ReasonReact comes with a small [router](https://reasonml.github.io/r
 
 # Bugs
 
-- When a user clicks the "Undo" button, the last distance calculated gets
-  undone, but then when they click "Next Destination" again, the last undone calculation gets added back to the total.
+- When a user clicks "Undo" until there are no DestinationInputs rendered on
+  the screen, the next time they click "Next Destination", the UI goes blank and an uncaught "Stack.Empty" error is raised.
