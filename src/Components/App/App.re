@@ -37,6 +37,7 @@ type state = {
   lastDestination: string,
   totalDistance: float,
   everyCalculation: Stack.t(float),
+  lastDistanceSubtracted: option(float),
 };
 
 type calculation =
@@ -45,6 +46,7 @@ type calculation =
 
 type action('event) =
   | AddNewInput
+  // TODO: rename this to RemoveInputAndSubtractCalculation
   | RemoveInput(calculation)
   | CalculateDistance
   | UpdateLastStartingPoint(ReactEvent.synthetic('event))
@@ -62,6 +64,7 @@ let initialState = {
   lastStartingPoint: "",
   lastDestination: "",
   everyCalculation: Stack.create(),
+  lastDistanceSubtracted: None,
 };
 
 let reducer = (state, action) => {
@@ -70,6 +73,7 @@ let reducer = (state, action) => {
   | RemoveInput(AmountToSubtract(amount)) => {
       ...state,
       totalDistance: state.totalDistance -. amount,
+      lastDistanceSubtracted: Some(amount),
       visibleInputs:
         state.visibleInputs > 0
           ? state.visibleInputs - 1 : state.visibleInputs,
@@ -79,7 +83,20 @@ let reducer = (state, action) => {
       starting point and the last destination, and calculates the distance between
       the two.
       */
-  | CalculateDistance => {...state, calculations: state.calculations + 1}
+  | CalculateDistance =>
+    let shouldCalculate =
+      switch (state.lastDistanceSubtracted) {
+      | Some(value) when value == Stack.top(state.everyCalculation) => false
+      | Some(_) => true
+      | None => true
+      };
+    ();
+
+    Js.log(Stack.top(state.everyCalculation));
+    Js.log(state.lastDistanceSubtracted);
+    shouldCalculate
+      ? {...state, calculations: state.calculations + 1} : state;
+
   | UpdateLastStartingPoint(event) => {
       ...state,
       lastStartingPoint: ReactEvent.Synthetic.target(event)##value,
@@ -176,7 +193,6 @@ let make = () => {
              Js.Promise.resolve();
            })
         |> catch(_err => {
-             //  setState(_previousState => ErrorFetchingDogs);
              Js.log(_err);
              Js.Promise.resolve();
            })
