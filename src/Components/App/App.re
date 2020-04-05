@@ -45,7 +45,7 @@ type calculation =
 
 type action('event) =
   | AddNewInput
-  | RemoveInput(calculation)
+  | RemoveInputAndSubtractTotalDistance(calculation)
   | CalculateDistance
   | UpdateLastStartingPoint(ReactEvent.synthetic('event))
   | UpdateLastDestination(ReactEvent.synthetic('event))
@@ -67,7 +67,7 @@ let initialState = {
 let reducer = (state, action) => {
   switch (action) {
   | AddNewInput => {...state, visibleInputs: state.visibleInputs + 1}
-  | RemoveInput(AmountToSubtract(amount)) => {
+  | RemoveInputAndSubtractTotalDistance(AmountToSubtract(amount)) => {
       ...state,
       totalDistance: state.totalDistance -. amount,
       visibleInputs:
@@ -127,7 +127,7 @@ let undoLastCalculation = (event, dispatch, state) => {
 
   Stack.pop(state.everyCalculation)
   |> (x => AmountToSubtract(x))
-  |> (x => RemoveInput(x))
+  |> (x => RemoveInputAndSubtractTotalDistance(x))
   |> dispatch;
 };
 

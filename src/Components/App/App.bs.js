@@ -67,7 +67,7 @@ function reducer(state, action) {
     }
   } else {
     switch (action.tag | 0) {
-      case /* RemoveInput */0 :
+      case /* RemoveInputAndSubtractTotalDistance */0 :
           var match = action[0];
           if (match.tag) {
             return {
@@ -140,7 +140,7 @@ function undoLastCalculation($$event, dispatch, state) {
   if (lastItemOnStack === undefined) {
     Stack.push(0.0, state.everyCalculation);
   }
-  return Curry._1(dispatch, /* RemoveInput */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(state.everyCalculation)])]));
+  return Curry._1(dispatch, /* RemoveInputAndSubtractTotalDistance */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(state.everyCalculation)])]));
 }
 
 function App(Props) {
