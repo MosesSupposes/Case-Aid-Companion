@@ -41,8 +41,7 @@ var initialState = {
   lastStartingPoint: "",
   lastDestination: "",
   totalDistance: 0.0,
-  everyCalculation: initialState_everyCalculation,
-  lastDistanceSubtracted: undefined
+  everyCalculation: initialState_everyCalculation
 };
 
 function reducer(state, action) {
@@ -54,42 +53,30 @@ function reducer(state, action) {
               lastStartingPoint: state.lastStartingPoint,
               lastDestination: state.lastDestination,
               totalDistance: state.totalDistance,
-              everyCalculation: state.everyCalculation,
-              lastDistanceSubtracted: state.lastDistanceSubtracted
+              everyCalculation: state.everyCalculation
             };
     } else {
-      var match = state.lastDistanceSubtracted;
-      var shouldCalculate = match !== undefined ? match !== Stack.top(state.everyCalculation) : true;
-      console.log(Stack.top(state.everyCalculation));
-      console.log(state.lastDistanceSubtracted);
-      if (shouldCalculate) {
-        return {
-                visibleInputs: state.visibleInputs,
-                calculations: state.calculations + 1 | 0,
-                lastStartingPoint: state.lastStartingPoint,
-                lastDestination: state.lastDestination,
-                totalDistance: state.totalDistance,
-                everyCalculation: state.everyCalculation,
-                lastDistanceSubtracted: state.lastDistanceSubtracted
-              };
-      } else {
-        return state;
-      }
+      return {
+              visibleInputs: state.visibleInputs,
+              calculations: state.calculations + 1 | 0,
+              lastStartingPoint: state.lastStartingPoint,
+              lastDestination: state.lastDestination,
+              totalDistance: state.totalDistance,
+              everyCalculation: state.everyCalculation
+            };
     }
   } else {
     switch (action.tag | 0) {
       case /* RemoveInput */0 :
-          var match$1 = action[0];
-          if (match$1.tag) {
-            var amount = match$1[0];
+          var match = action[0];
+          if (match.tag) {
             return {
                     visibleInputs: state.visibleInputs > 0 ? state.visibleInputs - 1 | 0 : state.visibleInputs,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
-                    totalDistance: state.totalDistance - amount,
-                    everyCalculation: state.everyCalculation,
-                    lastDistanceSubtracted: amount
+                    totalDistance: state.totalDistance - match[0],
+                    everyCalculation: state.everyCalculation
                   };
           } else {
             return state;
@@ -101,8 +88,7 @@ function reducer(state, action) {
                   lastStartingPoint: action[0].target.value,
                   lastDestination: state.lastDestination,
                   totalDistance: state.totalDistance,
-                  everyCalculation: state.everyCalculation,
-                  lastDistanceSubtracted: state.lastDistanceSubtracted
+                  everyCalculation: state.everyCalculation
                 };
       case /* UpdateLastDestination */2 :
           return {
@@ -111,24 +97,22 @@ function reducer(state, action) {
                   lastStartingPoint: state.lastStartingPoint,
                   lastDestination: action[0].target.value,
                   totalDistance: state.totalDistance,
-                  everyCalculation: state.everyCalculation,
-                  lastDistanceSubtracted: state.lastDistanceSubtracted
+                  everyCalculation: state.everyCalculation
                 };
       case /* IncreaseTotalDistance */3 :
-          var match$2 = action[0];
-          if (match$2.tag) {
+          var match$1 = action[0];
+          if (match$1.tag) {
             return state;
           } else {
-            var amount$1 = match$2[0];
-            Stack.push(amount$1, state.everyCalculation);
+            var amount = match$1[0];
+            Stack.push(amount, state.everyCalculation);
             return {
                     visibleInputs: state.visibleInputs,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
-                    totalDistance: state.totalDistance + amount$1,
-                    everyCalculation: state.everyCalculation,
-                    lastDistanceSubtracted: state.lastDistanceSubtracted
+                    totalDistance: state.totalDistance + amount,
+                    everyCalculation: state.everyCalculation
                   };
           }
       
