@@ -84,6 +84,12 @@ let reducer = (state, action) => {
       the two.
       */
   | CalculateDistance =>
+    /* This variable determines whether or not we should calculate the next distance.
+       The only case when we should not calculate the next distance is when the last
+       amount subtracted is equal to the last item on the stack of every calculation.
+       When this is the case, this means that the next time the user presses "Next Destination",
+       the last amount that was subtracted will be added onto the total distance.
+       */
     let shouldCalculate =
       switch (state.lastDistanceSubtracted) {
       | Some(value) when value == Stack.top(state.everyCalculation) => false
