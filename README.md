@@ -63,9 +63,9 @@ By the way, ReasonReact comes with a small [router](https://reasonml.github.io/r
 
 # Todo
 
-- Add a changelog 🗒
-- Deploy 🚀
 - Auto-populate the next "From" input with the value of the last "To" input.
+- Add autocomplete feature that suggests destinations based on previous
+  visits.
 
 # Bugs
 
