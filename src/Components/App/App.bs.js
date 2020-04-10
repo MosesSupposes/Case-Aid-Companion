@@ -1,13 +1,14 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
+var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Stack = require("bs-platform/lib/js/stack.js");
 var React = require("react");
 var $$String = require("bs-platform/lib/js/string.js");
+var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
-var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var UndoButton$ReasonReactExamples = require("../UndoButton/UndoButton.bs.js");
 var TotalDistance$ReasonReactExamples = require("../TotalDistance/TotalDistance.bs.js");
@@ -143,6 +144,23 @@ function undoLastCalculation($$event, dispatch, state) {
   return Curry._1(dispatch, /* RemoveInputAndSubtractFromTotalDistance */Block.__(0, [/* AmountToSubtract */Block.__(1, [Stack.pop(state.everyCalculation)])]));
 }
 
+function renderEachCalculation(stack) {
+  var arr = {
+    contents: []
+  };
+  Stack.iter((function (x) {
+          arr.contents = Belt_Array.concat(arr.contents, [x]);
+          return /* () */0;
+        }), stack);
+  return $$Array.map((function (c) {
+                return React.createElement("div", {
+                            style: {
+                              alignSelf: "center"
+                            }
+                          }, c.toString() + " mi.");
+              }), arr.contents);
+}
+
 function App(Props) {
   var match = React.useReducer(reducer, initialState);
   var dispatch = match[1];
@@ -152,7 +170,7 @@ function App(Props) {
           fetch(distanceMatrixFullUrl).then((function (response) {
                       return response.json();
                     })).then((function (jsonResponse) {
-                    var distance = ((jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0");
+                    var distance = ((jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0.0");
                     var x = Caml_format.caml_float_of_string(List.hd($$String.split_on_char(/* " " */32, distance)));
                     Curry._1(dispatch, /* IncreaseTotalDistance */Block.__(3, [/* AmountToAdd */Block.__(0, [x])]));
                     return Promise.resolve(/* () */0);
@@ -178,7 +196,7 @@ function App(Props) {
                     }, "Next destination")), React.createElement("div", {
                   style: rightSideOfPageStyles
                 }, React.createElement(TotalDistance$ReasonReactExamples.make, {
-                      distance: Pervasives.string_of_float(state.totalDistance)
+                      distance: state.totalDistance.toString()
                     }), React.createElement(UndoButton$ReasonReactExamples.make, {
                       undoLastCalculation: (function ($$event) {
                           return undoLastCalculation($$event, dispatch, state);
@@ -198,5 +216,6 @@ exports.calculateDistanceThenCreateNewInput = calculateDistanceThenCreateNewInpu
 exports.handleLastStartingPointChange = handleLastStartingPointChange;
 exports.handleLastDestinationChange = handleLastDestinationChange;
 exports.undoLastCalculation = undoLastCalculation;
+exports.renderEachCalculation = renderEachCalculation;
 exports.make = make;
 /* initialState Not a pure module */

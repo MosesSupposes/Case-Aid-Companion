@@ -131,6 +131,21 @@ let undoLastCalculation = (event, dispatch, state) => {
   |> dispatch;
 };
 
+let renderEachCalculation = (stack: Stack.t(float)) => {
+  let arr = ref([||]);
+  Stack.iter(x => {arr := Belt.Array.concat(arr^, [|x|])}, stack);
+
+  ReasonReact.array(
+    Array.map(
+      c =>
+        <div style={ReactDOMRe.Style.make(~alignSelf="center", ())}>
+          {ReasonReact.string(Js.Float.toString(c) ++ " mi.")}
+        </div>,
+      arr.contents,
+    ),
+  );
+};
+
 /**
  * =============== Main ===============
  */
@@ -161,8 +176,8 @@ let make = () => {
         |> then_(jsonResponse => {
              let distance: string = [%bs.raw
                {|
-                 (jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0"
-                |}
+                  (jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0.0"
+                 |}
              ];
 
              // Increase the total distance by the computed result
@@ -200,6 +215,7 @@ let make = () => {
            />,
          ),
        )}
+      // {renderEachCalculation(state.everyCalculation)}
       <button
         style=nextDestinationButtonStyles
         onClick={event => {
@@ -210,7 +226,7 @@ let make = () => {
       </button>
     </form>
     <div style=rightSideOfPageStyles>
-      <TotalDistance distance={string_of_float(state.totalDistance)} />
+      <TotalDistance distance={Js.Float.toString(state.totalDistance)} />
       <UndoButton
         undoLastCalculation={event =>
           undoLastCalculation(event, dispatch, state)
