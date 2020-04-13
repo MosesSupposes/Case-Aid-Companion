@@ -10,19 +10,22 @@ external fetch: string => Js.Promise.t('a) = "fetch";
 
 let wrapperStyles =
   ReactDOMRe.Style.make(
-    ~display="flex",
-    ~justifyContent="space-around",
-    ~flexWrap="wrap",
+    ~display="grid",
+    ~gridTemplateColumns="2fr 1fr 1fr",
+    ~gridTemplateRows="4fr 1fr",
     (),
   );
 let nextDestinationButtonStyles =
-  ReactDOMRe.Style.make(~marginTop=".35rem", ());
-let undoButtonStyles = ReactDOMRe.Style.make(~flexBasis="100%", ());
+  ReactDOMRe.Style.make(~gridRowStart="2", ~marginTop=".35rem", ());
+let leftSideOfPageStyles = ReactDOMRe.Style.make(~gridColumnStart="1", ());
+let middleOfPageStyles = ReactDOMRe.Style.make(~gridColumnStart="2", ());
 let rightSideOfPageStyles =
   ReactDOMRe.Style.make(
+    ~gridColumnStart="3",
     ~display="flex",
     ~flexDirection="column",
-    ~alignItems="flex-end",
+    ~justifyContent="space-between",
+    ~alignItems="center",
     (),
   );
 
@@ -133,12 +136,30 @@ let undoLastCalculation = (event, dispatch, state) => {
 
 let renderEachCalculation = (stack: Stack.t(float)) => {
   let arr = ref([||]);
-  Stack.iter(x => {arr := Belt.Array.concat(arr^, [|x|])}, stack);
+  Stack.iter(x => {arr := Belt.Array.concat([|x|], arr^)}, stack);
+
+  // Shift each index of the array down one. This is done to keep
+  // the displayed calculation on the same level as the inputs it's
+  // attached to.
+  arr :=
+    Belt.Array.mapWithIndex(arr^, (i, value) =>
+      if (i == Array.length(arr^) - 1) {
+        0.0;
+      } else {
+        arr^[i + 1];
+      }
+    );
 
   ReasonReact.array(
     Array.map(
       c =>
-        <div style={ReactDOMRe.Style.make(~alignSelf="center", ())}>
+        <div
+          style={ReactDOMRe.Style.make(
+            ~position="relative",
+            ~top="12.5px",
+            ~marginBottom="13px",
+            (),
+          )}>
           {ReasonReact.string(Js.Float.toString(c) ++ " mi.")}
         </div>,
       arr.contents,
@@ -204,7 +225,7 @@ let make = () => {
   );
 
   <div style=wrapperStyles>
-    <form>
+    <form style=leftSideOfPageStyles>
       {ReasonReact.array(
          Array.make(
            state.visibleInputs,
@@ -215,7 +236,6 @@ let make = () => {
            />,
          ),
        )}
-      // {renderEachCalculation(state.everyCalculation)}
       <button
         style=nextDestinationButtonStyles
         onClick={event => {
@@ -225,6 +245,9 @@ let make = () => {
         {ReasonReact.string("Next destination")}
       </button>
     </form>
+    <div style=middleOfPageStyles>
+      {renderEachCalculation(state.everyCalculation)}
+    </div>
     <div style=rightSideOfPageStyles>
       <TotalDistance distance={Js.Float.toString(state.totalDistance)} />
       <UndoButton

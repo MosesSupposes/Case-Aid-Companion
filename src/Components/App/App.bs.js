@@ -15,23 +15,30 @@ var TotalDistance$ReasonReactExamples = require("../TotalDistance/TotalDistance.
 var DestinationInputs$ReasonReactExamples = require("../DestinationInputs/DestinationInputs.bs.js");
 
 var wrapperStyles = {
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "space-around"
+  display: "grid",
+  gridTemplateColumns: "2fr 1fr 1fr",
+  gridTemplateRows: "4fr 1fr"
 };
 
 var nextDestinationButtonStyles = {
-  marginTop: ".35rem"
+  marginTop: ".35rem",
+  gridRowStart: "2"
 };
 
-var undoButtonStyles = {
-  flexBasis: "100%"
+var leftSideOfPageStyles = {
+  gridColumnStart: "1"
+};
+
+var middleOfPageStyles = {
+  gridColumnStart: "2"
 };
 
 var rightSideOfPageStyles = {
   display: "flex",
-  alignItems: "flex-end",
-  flexDirection: "column"
+  alignItems: "center",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  gridColumnStart: "3"
 };
 
 var initialState_everyCalculation = Stack.create(/* () */0);
@@ -149,13 +156,22 @@ function renderEachCalculation(stack) {
     contents: []
   };
   Stack.iter((function (x) {
-          arr.contents = Belt_Array.concat(arr.contents, [x]);
+          arr.contents = Belt_Array.concat([x], arr.contents);
           return /* () */0;
         }), stack);
+  arr.contents = Belt_Array.mapWithIndex(arr.contents, (function (i, value) {
+          if (i === (arr.contents.length - 1 | 0)) {
+            return 0.0;
+          } else {
+            return Caml_array.caml_array_get(arr.contents, i + 1 | 0);
+          }
+        }));
   return $$Array.map((function (c) {
                 return React.createElement("div", {
                             style: {
-                              alignSelf: "center"
+                              marginBottom: "13px",
+                              position: "relative",
+                              top: "12.5px"
                             }
                           }, c.toString() + " mi.");
               }), arr.contents);
@@ -182,7 +198,9 @@ function App(Props) {
         }), [state.calculations]);
   return React.createElement("div", {
               style: wrapperStyles
-            }, React.createElement("form", undefined, Caml_array.caml_make_vect(state.visibleInputs, React.createElement(DestinationInputs$ReasonReactExamples.make, {
+            }, React.createElement("form", {
+                  style: leftSideOfPageStyles
+                }, Caml_array.caml_make_vect(state.visibleInputs, React.createElement(DestinationInputs$ReasonReactExamples.make, {
                           dispatch: dispatch,
                           handleLastStartingPointChange: handleLastStartingPointChange,
                           handleLastDestinationChange: handleLastDestinationChange
@@ -194,6 +212,8 @@ function App(Props) {
                           return Curry._1(dispatch, /* CalculateDistance */1);
                         })
                     }, "Next destination")), React.createElement("div", {
+                  style: middleOfPageStyles
+                }, renderEachCalculation(state.everyCalculation)), React.createElement("div", {
                   style: rightSideOfPageStyles
                 }, React.createElement(TotalDistance$ReasonReactExamples.make, {
                       distance: state.totalDistance.toString()
@@ -208,7 +228,8 @@ var make = App;
 
 exports.wrapperStyles = wrapperStyles;
 exports.nextDestinationButtonStyles = nextDestinationButtonStyles;
-exports.undoButtonStyles = undoButtonStyles;
+exports.leftSideOfPageStyles = leftSideOfPageStyles;
+exports.middleOfPageStyles = middleOfPageStyles;
 exports.rightSideOfPageStyles = rightSideOfPageStyles;
 exports.initialState = initialState;
 exports.reducer = reducer;
