@@ -136,7 +136,19 @@ let undoLastCalculation = (event, dispatch, state) => {
 
 let renderEachCalculation = (stack: Stack.t(float)) => {
   let arr = ref([||]);
-  Stack.iter(x => {arr := Belt.Array.concat(arr^, [|x|])}, stack);
+  Stack.iter(x => {arr := Belt.Array.concat([|x|], arr^)}, stack);
+
+  // Shift each index of the array down one. This is done to keep
+  // the displayed calculation on the same level as the inputs it's
+  // attached to.
+  arr :=
+    Belt.Array.mapWithIndex(arr^, (i, value) =>
+      if (i == Array.length(arr^) - 1) {
+        0.0;
+      } else {
+        arr^[i + 1];
+      }
+    );
 
   ReasonReact.array(
     Array.map(

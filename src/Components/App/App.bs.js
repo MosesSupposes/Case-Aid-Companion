@@ -156,9 +156,16 @@ function renderEachCalculation(stack) {
     contents: []
   };
   Stack.iter((function (x) {
-          arr.contents = Belt_Array.concat(arr.contents, [x]);
+          arr.contents = Belt_Array.concat([x], arr.contents);
           return /* () */0;
         }), stack);
+  arr.contents = Belt_Array.mapWithIndex(arr.contents, (function (i, value) {
+          if (i === (arr.contents.length - 1 | 0)) {
+            return 0.0;
+          } else {
+            return Caml_array.caml_array_get(arr.contents, i + 1 | 0);
+          }
+        }));
   return $$Array.map((function (c) {
                 return React.createElement("div", {
                             style: {
