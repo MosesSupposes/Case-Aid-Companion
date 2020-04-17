@@ -54,24 +54,28 @@ var initialState = {
 
 function reducer(state, action) {
   if (typeof action === "number") {
-    if (action === /* AddNewInput */0) {
-      return {
-              visibleInputs: state.visibleInputs + 1 | 0,
-              calculations: state.calculations,
-              lastStartingPoint: state.lastStartingPoint,
-              lastDestination: state.lastDestination,
-              totalDistance: state.totalDistance,
-              everyCalculation: state.everyCalculation
-            };
-    } else {
-      return {
-              visibleInputs: state.visibleInputs,
-              calculations: state.calculations + 1 | 0,
-              lastStartingPoint: state.lastStartingPoint,
-              lastDestination: state.lastDestination,
-              totalDistance: state.totalDistance,
-              everyCalculation: state.everyCalculation
-            };
+    switch (action) {
+      case /* AddNewInput */0 :
+          return {
+                  visibleInputs: state.visibleInputs + 1 | 0,
+                  calculations: state.calculations,
+                  lastStartingPoint: state.lastStartingPoint,
+                  lastDestination: state.lastDestination,
+                  totalDistance: state.totalDistance,
+                  everyCalculation: state.everyCalculation
+                };
+      case /* CalculateDistance */1 :
+          return {
+                  visibleInputs: state.visibleInputs,
+                  calculations: state.calculations + 1 | 0,
+                  lastStartingPoint: state.lastStartingPoint,
+                  lastDestination: state.lastDestination,
+                  totalDistance: state.totalDistance,
+                  everyCalculation: state.everyCalculation
+                };
+      case /* Reset */2 :
+          return initialState;
+      
     }
   } else {
     switch (action.tag | 0) {

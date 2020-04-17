@@ -52,7 +52,8 @@ type action('event) =
   | CalculateDistance
   | UpdateLastStartingPoint(ReactEvent.synthetic('event))
   | UpdateLastDestination(ReactEvent.synthetic('event))
-  | IncreaseTotalDistance(calculation);
+  | IncreaseTotalDistance(calculation)
+  | Reset;
 
 /**
  * =============== State / State Management ===============
@@ -94,6 +95,7 @@ let reducer = (state, action) => {
   | IncreaseTotalDistance(AmountToAdd(amount)) =>
     Stack.push(amount, state.everyCalculation);
     {...state, totalDistance: state.totalDistance +. amount};
+  | Reset => initialState
   | _ => state
   };
 };
