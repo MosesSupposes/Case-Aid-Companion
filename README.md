@@ -64,8 +64,11 @@ By the way, ReasonReact comes with a small [router](https://reasonml.github.io/r
 # Todo
 
 - Auto-populate the next "From" input with the value of the last "To" input.
+- Incorporate a database
 - Add autocomplete feature that suggests destinations based on previous
   visits.
+- Cache the results of previous calculations
+- Auto-populate the state that the user is in for each calculation
 
 # Bugs
 
