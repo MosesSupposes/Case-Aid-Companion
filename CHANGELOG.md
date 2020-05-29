@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2020-05-29
+
+### Added
+
+- None
+
+### Changed
+
+- Clamped the decimal value that represents the total distance
+  traveled. It's now limited to two decimal spaces.
+
+### Removed
+
+- Removed the intermediate calculations that were being rendered next to each input.
+
 ## [0.2.0] - 2020-04-09
 
 ### Added
