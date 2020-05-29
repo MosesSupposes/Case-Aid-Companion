@@ -1,4 +1,5 @@
-let wrapperStyles = ReactDOMRe.Style.make(~margin=".75rem 0", ());
+let wrapperStyles =
+  ReactDOMRe.Style.make(~margin=".75rem 0", ~display="flex", ());
 let inputStyles = ReactDOMRe.Style.make(~margin="0 .5rem", ());
 
 [@react.component]

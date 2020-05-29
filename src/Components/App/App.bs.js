@@ -41,7 +41,7 @@ var rightSideOfPageStyles = {
   gridColumnStart: "3"
 };
 
-var initialState_everyCalculation = Stack.create(/* () */0);
+var initialState_everyCalculation = Stack.create(undefined);
 
 var initialState = {
   visibleInputs: 1,
@@ -80,14 +80,14 @@ function reducer(state, action) {
   } else {
     switch (action.tag | 0) {
       case /* RemoveInputAndSubtractFromTotalDistance */0 :
-          var match = action[0];
-          if (match.tag) {
+          var amount = action[0];
+          if (amount.tag) {
             return {
                     visibleInputs: state.visibleInputs > 0 ? state.visibleInputs - 1 | 0 : state.visibleInputs,
                     calculations: state.calculations,
                     lastStartingPoint: state.lastStartingPoint,
                     lastDestination: state.lastDestination,
-                    totalDistance: state.totalDistance - match[0],
+                    totalDistance: state.totalDistance - amount[0],
                     everyCalculation: state.everyCalculation
                   };
           } else {
@@ -112,21 +112,20 @@ function reducer(state, action) {
                   everyCalculation: state.everyCalculation
                 };
       case /* IncreaseTotalDistance */3 :
-          var match$1 = action[0];
-          if (match$1.tag) {
+          var amount$1 = action[0];
+          if (amount$1.tag) {
             return state;
-          } else {
-            var amount = match$1[0];
-            Stack.push(amount, state.everyCalculation);
-            return {
-                    visibleInputs: state.visibleInputs,
-                    calculations: state.calculations,
-                    lastStartingPoint: state.lastStartingPoint,
-                    lastDestination: state.lastDestination,
-                    totalDistance: state.totalDistance + amount,
-                    everyCalculation: state.everyCalculation
-                  };
           }
+          var amount$2 = amount$1[0];
+          Stack.push(amount$2, state.everyCalculation);
+          return {
+                  visibleInputs: state.visibleInputs,
+                  calculations: state.calculations,
+                  lastStartingPoint: state.lastStartingPoint,
+                  lastDestination: state.lastDestination,
+                  totalDistance: state.totalDistance + amount$2,
+                  everyCalculation: state.everyCalculation
+                };
       
     }
   }
@@ -161,7 +160,7 @@ function renderEachCalculation(stack) {
   };
   Stack.iter((function (x) {
           arr.contents = Belt_Array.concat([x], arr.contents);
-          return /* () */0;
+          
         }), stack);
   arr.contents = Belt_Array.mapWithIndex(arr.contents, (function (i, value) {
           if (i === (arr.contents.length - 1 | 0)) {
@@ -193,12 +192,12 @@ function App(Props) {
                     var distance = ((jsonResponse.rows.length && jsonResponse.rows[0].elements[0].distance.text) || "0.0");
                     var x = Caml_format.caml_float_of_string(List.hd($$String.split_on_char(/* " " */32, distance)));
                     Curry._1(dispatch, /* IncreaseTotalDistance */Block.__(3, [/* AmountToAdd */Block.__(0, [x])]));
-                    return Promise.resolve(/* () */0);
+                    return Promise.resolve(undefined);
                   })).catch((function (_err) {
                   console.log(_err);
-                  return Promise.resolve(/* () */0);
+                  return Promise.resolve(undefined);
                 }));
-          return ;
+          
         }), [state.calculations]);
   return React.createElement("div", {
               style: wrapperStyles
@@ -216,11 +215,9 @@ function App(Props) {
                           return Curry._1(dispatch, /* CalculateDistance */1);
                         })
                     }, "Next destination")), React.createElement("div", {
-                  style: middleOfPageStyles
-                }, renderEachCalculation(state.everyCalculation)), React.createElement("div", {
                   style: rightSideOfPageStyles
                 }, React.createElement(TotalDistance$ReasonReactExamples.make, {
-                      distance: state.totalDistance.toString()
+                      distance: state.totalDistance.toFixed(2)
                     }), React.createElement(UndoButton$ReasonReactExamples.make, {
                       undoLastCalculation: (function ($$event) {
                           return undoLastCalculation($$event, dispatch, state);

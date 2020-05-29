@@ -4,6 +4,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 
 var wrapperStyles = {
+  display: "flex",
   margin: ".75rem 0"
 };
 

@@ -247,11 +247,18 @@ let make = () => {
         {ReasonReact.string("Next destination")}
       </button>
     </form>
-    <div style=middleOfPageStyles>
-      {renderEachCalculation(state.everyCalculation)}
-    </div>
+    // <div style=middleOfPageStyles>
+    //   {renderEachCalculation(state.everyCalculation)}
+    // </div>
     <div style=rightSideOfPageStyles>
-      <TotalDistance distance={Js.Float.toString(state.totalDistance)} />
+      <TotalDistance
+        // distance={Js.Float.toString(Js.Float.toFixed(state.totalDistance))}
+        // distance={Js.Float.toFixed(state.totalDistance)}
+        distance={Js.Float.toFixedWithPrecision(
+          state.totalDistance,
+          ~digits=2,
+        )}
+      />
       <UndoButton
         undoLastCalculation={event =>
           undoLastCalculation(event, dispatch, state)

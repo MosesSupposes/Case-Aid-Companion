@@ -17,7 +17,7 @@ function BlinkingGreeting(Props) {
                 }), 1000);
           return (function (param) {
                     clearInterval(id);
-                    return /* () */0;
+                    
                   });
         }), ([]));
   var style = match[0] ? ({

@@ -17,14 +17,14 @@ function FetchedDogPictures(Props) {
                     Curry._1(setState, (function (_previousState) {
                             return /* LoadedDogs */[jsonResponse.message];
                           }));
-                    return Promise.resolve(/* () */0);
+                    return Promise.resolve(undefined);
                   })).catch((function (_err) {
                   Curry._1(setState, (function (_previousState) {
                           return /* ErrorFetchingDogs */1;
                         }));
-                  return Promise.resolve(/* () */0);
+                  return Promise.resolve(undefined);
                 }));
-          return ;
+          
         }), ([]));
   var tmp;
   if (typeof state === "number") {
